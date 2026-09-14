@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PC Builder — v1.15.6</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#101317">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <h1>PC Builder</h1>
+        <p class="subtitle">Собери ПК. Играй. Зарабатывай.</p>
+      </div>
+      <div class="money">💰 $<span id="money">0</span></div>
+    </header>
+
+    <section id="mainMenuScreen" class="screen menu-screen">
+      <div class="menu-hero">
+        <div class="menu-logo">PC BUILDER</div>
+        <div class="menu-subtitle">Собери ПК. Играй. Зарабатывай.</div>
+      </div>
+      <div class="main-menu-buttons">
+        <button id="startGameBtn" class="menu-main-btn">▶ Начать</button>
+        <button id="loadGameBtn" class="menu-btn">📂 Загрузить</button>
+        <button id="infoBtn" class="menu-btn">ℹ Информация</button>
+        <button id="achievementsBtn" class="menu-btn">🏆 Достижения</button>
+        <button id="settingsBtn" class="menu-btn">⚙ Настройки</button>
+        <button id="tutorialBtn" class="menu-btn">🎓 Обучение</button>
+        <button id="updateLogBtn" class="menu-btn">📜 Update Log</button>
+      </div>
+      <div id="continueWrap" class="continue-wrap hidden">
+        <button id="continueBtn" class="menu-link-btn">↩ Продолжить текущую игру</button>
+      </div>
+      <div class="menu-version">PC Builder • v1.15.6</div>
+    </section>
+
+    <section id="modeScreen" class="screen hidden">
+      <div class="mode-screen-header">
+        <div>
+          <h2>Выбери режим</h2>
+          <p>Один режим — одно прохождение.</p>
+        </div>
+        <button id="backToMenuBtn" class="small">← В меню</button>
+      </div>
+      <div class="modes">
+        <button class="mode-card easy" data-mode="easy">
+          <b>🟢 Лёгкий</b>
+          <span>Нормальный стартовый ПК</span>
+        </button>
+        <button class="mode-card normal" data-mode="hard">
+          <b>🟡 Сложный</b>
+          <span>Слабый ПК и маленький бюджет</span>
+        </button>
+        <button class="mode-card hardcore" data-mode="hardcore">
+          <b>🔴 Хардкор</b>
+          <span>Практически голая система</span>
+        </button>
+      </div>
+    </section>
+
+
+    <div id="hardcoreConfirmModal" class="menu-modal hidden" aria-hidden="true">
+      <div class="menu-modal-backdrop"></div>
+      <section class="menu-modal-window hardcore-confirm-window" role="dialog" aria-modal="true" aria-labelledby="hardcoreConfirmTitle">
+        <div class="menu-modal-header"><h2 id="hardcoreConfirmTitle">⚠ Хардкор</h2></div>
+        <div class="menu-modal-body">
+          <div class="hardcore-warning">
+            <p><b>Хардкор очень сложен.</b></p>
+            <p>Этот режим создан только для тех, кто уже умеет обращаться с компьютерами и готов к жёстким ограничениям, поломкам и сложной сборке.</p>
+            <p><b>Действительно хочешь продолжить?</b></p>
+          </div>
+          <div class="hardcore-confirm-actions">
+            <button id="hardcoreConfirmYes" class="primary">Да, продолжить</button>
+            <button id="hardcoreConfirmNo" class="small">Нет, назад</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section id="gameScreen" class="screen hidden">
+      <div class="grid">
+        <section class="panel">
+          <div class="panel-title">
+            <h2 class="pc-title">🖥️ Мой ПК <span id="pcCoupons" class="pc-coupons" aria-label="Купоны"></span></h2>
+            <span id="modeLabel" class="badge"></span>
+          </div>
+          <div id="pcParts" class="parts"></div>
+          <div class="score-row">
+            <span>Мощность ПК</span>
+            <strong id="power">0</strong>
+          </div>
+        </section>
+
+        <section class="panel mini-games-panel">
+          <div class="panel-title">
+            <h2>🎮 Заработок</h2>
+            <span id="rewardInfo" class="badge">Награда зависит от ПК</span>
+          </div>
+
+          <div class="earn-tabs" role="tablist" aria-label="Разделы заработка">
+            <button id="miniGamesTab" class="earn-tab active" role="tab" aria-selected="true">🎮 Мини-игры</button>
+            <button id="afkTab" class="earn-tab" role="tab" aria-selected="false">💤 AFK</button>
+            <button id="aiTab" class="earn-tab" role="tab" aria-selected="false">🤖 Обучение ИИ</button>
+            <button id="programmingTab" class="earn-tab" role="tab" aria-selected="false">💻 Программирование</button>
+          </div>
+
+          <div id="miniGamesSection" class="earn-section">
+            <div id="gamePicker" class="game-picker"></div>
+            <div id="gameArea" class="game-area hidden"></div>
+          </div>
+
+          <div id="aiSection" class="earn-section hidden">
+            <div id="aiArea" class="ai-area"></div>
+          </div>
+
+          <div id="programmingSection" class="earn-section hidden">
+            <div id="programmingArea" class="programming-area"></div>
+          </div>
+
+          <div id="afkSection" class="earn-section hidden">
+            <div class="afk-mode-grid">
+              <button class="afk-mode-card active" data-afk-mode="normal">
+                <strong>💤 Обычный AFK</strong>
+                <span>Получаешь деньги каждую секунду. Никакого контроля.</span>
+              </button>
+              <button class="afk-mode-card" data-afk-mode="overclock">
+                <strong>🔥 Разгон</strong>
+                <span>×5 дохода, но нужны минимум 16 ГБ RAM и периодический контроль компонентов.</span>
+              </button>
+            </div>
+            <div id="afkArea" class="afk-area"></div>
+          </div>
+
+          <div id="gameResult" class="result"></div>
+        </section>
+
+        <section class="panel shop">
+          <div class="panel-title">
+            <h2>🛒 Магазин комплектующих</h2>
+            <div class="shop-actions"><button id="saveBtn" class="small">💾 Сохранить</button><button id="resetBtn" class="small danger">Сбросить</button></div>
+          </div>
+          <div id="marketEventBanner" class="market-event-banner" aria-live="polite"></div>
+          <div class="shop-launch">
+            <div>
+              <strong>Каталог открыт в отдельном окне.</strong>
+              <p>На хардкоре каталог становится многоуровневым: производитель → серия → детали.</p>
+            </div>
+            <button id="openShopBtn" class="primary shop-open">Открыть каталог</button>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+
+  <div id="osModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop"></div>
+    <section class="menu-modal-window" role="dialog" aria-modal="true" aria-labelledby="osTitle">
+      <div class="menu-modal-header"><h2 id="osTitle">💿 Операционная система</h2><button id="osCloseBtn" class="small">Закрыть</button></div>
+      <div id="osOptions" class="menu-modal-body os-options"></div>
+    </section>
+  </div>
+
+  <div id="osInstallModal" class="menu-modal hidden os-install-modal" aria-hidden="true">
+    <div class="menu-modal-backdrop"></div>
+    <section class="menu-modal-window os-install-window" role="dialog" aria-modal="true" aria-labelledby="osInstallTitle">
+      <div class="menu-modal-header"><h2 id="osInstallTitle">💿 Установка ОС</h2></div>
+      <div class="menu-modal-body os-install-body">
+        <p id="osInstallText">Загрузка и установка ОС...</p>
+        <div class="os-install-progress"><div id="osInstallProgressBar"></div></div>
+        <div id="osInstallStatus" class="os-install-status">0% · 0 сек</div>
+      </div>
+    </section>
+  </div>
+
+  <div id="purchaseCouponModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop" id="purchaseCouponBackdrop"></div>
+    <section class="menu-modal-window purchase-coupon-window" role="dialog" aria-modal="true" aria-labelledby="purchaseCouponTitle">
+      <div class="menu-modal-header"><h2 id="purchaseCouponTitle">🎟 Купон</h2></div>
+      <div id="purchaseCouponContent" class="menu-modal-body"></div>
+      <div class="purchase-coupon-actions">
+        <button id="purchaseCouponUseBtn" class="primary">Использовать купон</button>
+        <button id="purchaseCouponNoBtn" class="small">Купить без купона</button>
+        <button id="purchaseCouponCancelBtn" class="small danger">Отмена</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="extraCouponPurchaseModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop" id="extraCouponPurchaseBackdrop"></div>
+    <section class="menu-modal-window extra-coupon-purchase-window" role="dialog" aria-modal="true" aria-labelledby="extraCouponPurchaseTitle">
+      <div class="menu-modal-header"><h2 id="extraCouponPurchaseTitle">🎟️ EXTRA COUPON</h2></div>
+      <div id="extraCouponPurchaseContent" class="menu-modal-body"></div>
+      <div class="extra-coupon-purchase-actions">
+        <button id="extraCouponPurchaseBuyBtn" class="primary">Купить</button>
+        <button id="extraCouponPurchaseUseBothBtn" class="small extra-coupon-both hidden">Купить вместе с купоном на скидку</button>
+        <button id="extraCouponPurchaseCancelBtn" class="small danger">Отмена</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="couponReceivedModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop"></div>
+    <section class="menu-modal-window coupon-received-window" role="dialog" aria-modal="true" aria-labelledby="couponReceivedTitle">
+      <div class="menu-modal-header"><h2 id="couponReceivedTitle">🎟 Купон</h2></div>
+      <div id="couponReceivedContent" class="menu-modal-body"></div>
+      <div class="coupon-received-actions">
+        <button id="couponReceivedOkBtn" class="primary">Понятно</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="sellBlockedModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop"></div>
+    <section class="menu-modal-window sell-blocked-window" role="dialog" aria-modal="true" aria-labelledby="sellBlockedTitle">
+      <div class="menu-modal-header"><h2 id="sellBlockedTitle">🚫 Продажа запрещена</h2></div>
+      <div id="sellBlockedContent" class="menu-modal-body"></div>
+      <div class="sell-blocked-actions">
+        <button id="sellBlockedOkBtn" class="primary">Понятно</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="compatibilityPurchaseModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop"></div>
+    <section class="menu-modal-window compatibility-purchase-window" role="dialog" aria-modal="true" aria-labelledby="compatibilityPurchaseTitle">
+      <div class="menu-modal-header"><h2 id="compatibilityPurchaseTitle">⚠ Совместимость</h2></div>
+      <div id="compatibilityPurchaseContent" class="menu-modal-body"></div>
+      <div class="compatibility-purchase-actions">
+        <button id="compatibilityPurchaseYesBtn" class="primary">Да, купить</button>
+        <button id="compatibilityPurchaseNoBtn" class="small danger">Нет, отмена</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="shopModal" class="shop-modal hidden" aria-hidden="true">
+    <div class="shop-modal-backdrop" data-close-shop></div>
+    <section class="shop-window" role="dialog" aria-modal="true" aria-labelledby="shopWindowTitle">
+      <div class="shop-window-header">
+        <div>
+          <h2 id="shopWindowTitle">🛒 Каталог комплектующих</h2>
+          <div id="shopMeta" class="shop-meta"></div>
+        </div>
+        <button id="closeShopBtn" class="small">Закрыть</button>
+      </div>
+      <div id="shopItems"></div>
+    </section>
+  </div>
+
+
+  <div id="infoModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop" data-close-menu-modal="info"></div>
+    <section class="menu-modal-window" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+      <div class="menu-modal-header"><h2 id="infoTitle">ℹ Информация</h2><button class="small" data-close-menu-modal="info">Закрыть</button></div>
+      <div class="menu-modal-body">
+        <p><b>PC Builder</b> — игра про сборку ПК, мини-игры, заработок и апгрейды.</p>
+        <p>Чем лучше твоя сборка, тем выше потенциальный заработок в мини-играх. Комплектующие покупаются в динамическом магазине, а установленные детали можно менять.</p>
+        <div class="info-library">
+          <aside id="infoCategoryList" class="info-category-list"></aside>
+          <section id="infoCategoryContent" class="info-category-content"></section>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="settingsModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop" data-close-menu-modal="settings"></div>
+    <section class="menu-modal-window" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="menu-modal-header"><h2 id="settingsTitle">⚙ Настройки</h2><button class="small" data-close-menu-modal="settings">Закрыть</button></div>
+      <div class="menu-modal-body settings-body">
+        <label class="setting-row"><span><b>Анимации интерфейса</b><small>Отключает часть визуальных эффектов.</small></span><input id="animationsToggle" type="checkbox" checked></label>
+        <div class="theme-setting">
+          <div class="theme-setting-title"><b>Тема оформления</b><small>Меняет интерфейс и скроллбар.</small></div>
+          <div class="theme-options" role="radiogroup" aria-label="Тема оформления">
+            <label class="theme-option"><input type="radio" name="theme" value="dark" id="themeDark"><span>🌙 Тёмная</span></label>
+            <label class="theme-option"><input type="radio" name="theme" value="light" id="themeLight"><span>☀️ Светлая</span></label>
+          </div>
+        </div>
+        <button id="fullscreenBtn" class="small">⛶ Полноэкранный режим</button>
+        <div class="settings-note">Настройки сохраняются отдельно от прохождения.</div>
+      </div>
+    </section>
+  </div>
+
+  <div id="tutorialModal" class="menu-modal tutorial-overlay hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop" data-close-menu-modal="tutorial"></div>
+    <div id="tutorialSpotlight" class="tutorial-spotlight" aria-hidden="true"></div>
+    <section id="tutorialGuide" class="tutorial-guide" role="dialog" aria-modal="true" aria-labelledby="tutorialStepTitle">
+      <div class="tutorial-guide-header">
+        <div>
+          <span id="tutorialProgress" class="badge">1 / 5</span>
+          <h2 id="tutorialStepTitle" class="tutorial-step-title"></h2>
+        </div>
+        <button id="tutorialSkipBtn" class="small">Пропустить</button>
+      </div>
+      <p id="tutorialStepText" class="tutorial-step-text"></p>
+      <div class="tutorial-footer">
+        <div class="tutorial-actions">
+          <button id="tutorialPrev" class="small">← Назад</button>
+          <button id="tutorialNext" class="primary tutorial-next">Далее</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="afkTaskModal" class="menu-modal afk-fullscreen-tasks hidden" aria-hidden="true">
+    <div class="afk-task-layer" id="afkTaskContent"></div>
+  </div>
+
+  <div id="diagnosticModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop"></div>
+    <section class="menu-modal-window diagnostic-window" role="dialog" aria-modal="true" aria-labelledby="diagnosticTitle">
+      <div class="menu-modal-header"><h2 id="diagnosticTitle">🛠 Проверка ПК</h2></div>
+      <div id="diagnosticContent" class="menu-modal-body diagnostic-body"></div>
+      <div class="diagnostic-footer"><button id="diagnosticCloseBtn" class="primary">Понятно</button></div>
+    </section>
+  </div>
+
+  <div id="saveModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop" data-close-save></div>
+    <section class="menu-modal-window save-window" role="dialog" aria-modal="true" aria-labelledby="saveTitle">
+      <div class="menu-modal-header"><h2 id="saveTitle">💾 Сохранения</h2><button class="small" data-close-save>Закрыть</button></div>
+      <div class="menu-modal-body">
+        <p id="saveHint">Выбери ячейку для сохранения текущего прохождения.</p>
+        <div id="saveSlots" class="save-slots"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="resetConfirmModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop"></div>
+    <section class="menu-modal-window reset-confirm-window" role="dialog" aria-modal="true" aria-labelledby="resetConfirmTitle">
+      <div class="menu-modal-header"><h2 id="resetConfirmTitle">⚠ Сброс прохождения</h2></div>
+      <div class="menu-modal-body">
+        <p>Текущее прохождение будет удалено из активного слота. Хочешь сначала сохранить его?</p>
+        <div class="reset-confirm-actions">
+          <button id="saveBeforeResetBtn" class="primary">💾 Сохранить и сбросить</button>
+          <button id="resetWithoutSaveBtn" class="small danger">Сбросить без сохранения</button>
+          <button id="cancelResetBtn" class="small">Отмена</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="achievementsModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop" data-close-menu-modal="achievements"></div>
+    <section class="menu-modal-window achievements-window" role="dialog" aria-modal="true" aria-labelledby="achievementsTitle">
+      <div class="menu-modal-header"><h2 id="achievementsTitle">🏆 Достижения</h2><button class="small" data-close-menu-modal="achievements">Закрыть</button></div>
+      <div class="menu-modal-body">
+        <p>Собирай определённые конфигурации и открывай достижения. Полученное достижение остаётся навсегда.</p>
+        <div id="achievementList" class="achievement-list"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="updateLogModal" class="menu-modal hidden" aria-hidden="true">
+    <div class="menu-modal-backdrop" data-close-menu-modal="log"></div>
+    <section class="menu-modal-window update-log-window" role="dialog" aria-modal="true" aria-labelledby="updateLogTitle">
+      <div class="menu-modal-header"><h2 id="updateLogTitle">📜 Update Log</h2><button class="small" data-close-menu-modal="log">Закрыть</button></div>
+      <pre id="updateLogContent" class="update-log-content"></pre>
+    </section>
+  </div>
+
+  <canvas id="confettiCanvas" class="confetti-canvas" aria-hidden="true"></canvas>
+  <div id="extraCouponToast" class="extra-coupon-toast" aria-live="polite" aria-atomic="true">
+    <div class="extra-coupon-toast-icon">🎟️</div>
+    <div class="extra-coupon-toast-text">
+      <strong>EXTRA COUPON!</strong>
+      <span>Можно купить одну деталь даже при SOLD OUT.</span>
+    </div>
+  </div>
+
+  <div id="achievementToast" class="achievement-toast" aria-live="polite" aria-atomic="true">
+    <div id="achievementToastIcon" class="achievement-toast-icon">🏆</div>
+    <div class="achievement-toast-text">
+      <strong>Достижение получено!</strong>
+      <span id="achievementToastName"></span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
