@@ -120,14 +120,23 @@ function openBlackMarket() {
 function renderBlackMarketButton() {
   const btn = $('openBlackMarketBtn');
   if (!btn || !state) return;
-  if (isLightMode()) { btn.classList.add('hidden'); btn.disabled = true; return; }
+  const wrap = $('blackMarketLockIcon')?.parentElement;
+  if (isLightMode()) {
+    btn.classList.add('hidden');
+    btn.disabled = true;
+    wrap?.classList.add('hidden');
+    return;
+  }
+  wrap?.classList.remove('hidden');
   btn.classList.remove('hidden');
   const available = blackMarketAvailable();
+  btn.classList.remove('access-locked');
   btn.disabled = !available;
   btn.classList.toggle('black-market-ready', available);
   btn.classList.toggle('black-market-locked', !available);
-  btn.textContent = available ? '🕷️ Чёрный рынок' : '⛓️ Чёрный рынок';
+  btn.textContent = 'Чёрный рынок';
   btn.title = available ? 'Чёрный рынок доступен до следующего реролла.' : 'В этом реролле шанс 25% не сработал. Жди следующий реролл.';
+  wrap?.classList.toggle('hidden', available);
 }
 function renderMarketEventBanner() {
   const banner = $('marketEventBanner');

@@ -1,5 +1,36 @@
+function normaliseLightStarterIds() {
+  if (!state || state.mode !== 'light') return;
+  const map = {
+    'starter-easy-ram': 'ram-ddr3-8',
+    'starter-easy-storage': 'storage-ssd-256-sata',
+    'starter-easy-case': 'case-case-basic',
+    'starter-easy-cooling': 'cooling-cooler-stock'
+  };
+  state.installed = state.installed || {};
+  state.owned = state.owned || {};
+  state.starterProtected = state.starterProtected || {};
+  Object.entries(map).forEach(([oldId, newId]) => {
+    if (!itemById(newId)) return;
+    const category = itemById(newId).category;
+    if (state.installed[category] === oldId) state.installed[category] = newId;
+    if (state.owned[oldId]) {
+      state.owned[newId] = true;
+      delete state.owned[oldId];
+    }
+    if (state.starterProtected[oldId]) {
+      state.starterProtected[newId] = true;
+      delete state.starterProtected[oldId];
+    }
+    if (state.broken?.[oldId]) {
+      state.broken[newId] = state.broken[oldId];
+      delete state.broken[oldId];
+    }
+  });
+}
+
 function ensureRequiredModeStarters() {
   if (!state || !MODE_CONFIG[state.mode]) return;
+  normaliseLightStarterIds();
   const start = MODE_CONFIG[state.mode].start || {};
   state.installed = state.installed || {};
   state.owned = state.owned || {};

@@ -1,4 +1,13 @@
 function requestModeStart(mode) {
+  if ((mode === 'hardcore' || mode === 'problem') && typeof isLightExamPassed === 'function' && !isLightExamPassed()) {
+    openAdvancedAccessModal(mode);
+    return;
+  }
+  if (typeof problemCloseMode === 'function') problemCloseMode();
+  if (mode === 'problem') {
+    openProblemDifficulty();
+    return;
+  }
   if (mode === 'hardcore') {
     openHardcoreConfirm();
     return;
@@ -10,7 +19,7 @@ function requestModeStart(mode) {
   start(mode);
 }
 
-$('diagnosticCloseBtn')?.addEventListener('click', closeDiagnostic);
+$('diagnosticCloseBtn')?.addEventListener('click', (event) => { event.preventDefault(); closeDiagnostic(); if (typeof onLightDiagnosticClosed === 'function') onLightDiagnosticClosed(); });
 
 $('tutorialBtn').addEventListener('click', openKnowledgeLevelModal);
 $('tutorialSkipBtn').addEventListener('click', openTutorialSkipConfirm);
@@ -20,8 +29,13 @@ $('tutorialPrev').addEventListener('click', () => { if (tutorialStep > 0) { tuto
 $('tutorialNext').addEventListener('click', () => { if (tutorialStep < TUTORIAL_STEPS.length - 1) { tutorialStep += 1; renderTutorialStep(); } else finishTutorial(); });
 
 $('startGameBtn').addEventListener('click', showModeScreen);
+$('advancedAccessCloseBtn')?.addEventListener('click', closeAdvancedAccessModal);
+$('advancedAccessLightBtn')?.addEventListener('click', () => { closeAdvancedAccessModal(); requestModeStart('light'); });
+document.querySelector('#advancedAccessModal .menu-modal-backdrop')?.addEventListener('click', closeAdvancedAccessModal);
+$('startGameBtn').addEventListener('click', () => renderAdvancedAccessGates());
 $('loadGameBtn').addEventListener('click', openLoadModal);
 $('continueBtn').addEventListener('click', () => { if (state) render(); });
+$('lightCompleteCheckBtn')?.addEventListener('click', () => { if (typeof runLightCompleteCheck === 'function') runLightCompleteCheck(); });
 $('backToMenuBtn').addEventListener('click', showMainMenu);
 $('lightTrainingStartBtn')?.addEventListener('click', confirmLightTrainingStart);
 $('lightTrainingCancelBtn')?.addEventListener('click', closeLightTrainingConfirm);
@@ -36,9 +50,12 @@ document.querySelectorAll('[data-close-menu-modal]').forEach((el) => el.addEvent
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') {
     if (!$('blackMarketPoliceFineModal')?.classList.contains('hidden')) return;
+    if (!$('advancedAccessModal')?.classList.contains('hidden')) { closeAdvancedAccessModal(); return; }
     if (!$('firstVisitIntro')?.classList.contains('hidden')) return;
     if (!$('knowledgeLevelModal')?.classList.contains('hidden')) return;
     if (!$('knowledgeTrainingModal')?.classList.contains('hidden')) return;
+    if (!$('problemDifficultyModal')?.classList.contains('hidden')) { problemCloseDifficulty(); return; }
+    if (!$('problemDetailDrawer')?.classList.contains('open')) { if (!$('problemScreen')?.classList.contains('hidden')) { problemCloseMode(); showModeScreen(); return; } } else { problemCloseDrawer(); return; }
     if (!$('examModal')?.classList.contains('hidden')) return;
     if (!$('examAnalysisModal')?.classList.contains('hidden')) { closeExamAnalysis(); return; }
     if (!$('examExitModal')?.classList.contains('hidden')) return;
@@ -168,3 +185,6 @@ finishBootLoading();
 
 window.addEventListener('resize', () => { if (!$('tutorialModal').classList.contains('hidden')) positionTutorialGuide(); if (!$('examModal')?.classList.contains('hidden')) positionExamUi(); });
 window.addEventListener('scroll', () => { if (!$('tutorialModal').classList.contains('hidden')) positionTutorialGuide(); }, true);
+
+
+renderAdvancedAccessGates();

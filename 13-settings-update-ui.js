@@ -32,9 +32,14 @@ const I18N_EXAM_DYNAMIC_PHRASES = [
   [/^Экзамен завершён: ([0-9]+)\/100\. Игра сейчас закрыта\. Хочешь сохранить это прохождение\?$/g, (m, score) => `Exam Finished: ${score}/100. The game is now closed. Would you like to save this playthrough?`],
   [/^❌ Код не совпадает с ориентиром точь-в-точь\. Проверь пробелы, переносы строк и символы\.$/g, '❌ The code does not match the reference exactly. Check spaces, line breaks, and characters.'],
   [/^🔌 Блок питания слабее уровня всей сборки$/g, "🔌 Power Supply Below the Build's Overall Level"],
+  [/^🔌 Слишком простой блок питания$/g, '🔌 Power Supply Too Basic'],
+  [/^(.+?) относится к стандартной серии без сертификата 80+\. Для сборки такого уровня это заметное слабое место: мощность блока сама по себе ещё не делает его хорошим выбором\. В более серьёзной конфигурации стоит смотреть хотя бы на 80\+ Bronze, а для действительно мощной системы — на более высокий класс\.$/g,
+    (m, psu) => `${psu} belongs to the standard series without an 80+ certificate. For a build at this level, that is a noticeable weak point: PSU wattage alone does not make it a good choice. For a more serious configuration, consider at least 80+ Bronze, and for a truly powerful system, a higher class.`],
   [/^⚖️ Перекос между CPU и GPU$/g, '⚖️ CPU/GPU Imbalance'],
   [/^🧠 Мало оперативной памяти$/g, '🧠 Not Enough RAM'],
   [/^🧠 RAM ниже уровня мощной сборки$/g, '🧠 RAM Below the Level of a High-Performance Build'],
+  [/^💾 Слабый накопитель для этой сборки$/g, '💾 Weak storage drive for this build'],
+  [/^(.+?) — медленный\/небольшой накопитель относительно остальной системы\. Когда CPU и GPU заметно мощнее, такой накопитель становится дисбалансом: часть бюджета вложена в производительность, а хранение и загрузка остаются на начальном уровне\.$/g, (m, storage) => `${storage} — a slow or small storage drive compared with the rest of the system. When the CPU and GPU are noticeably more powerful, a drive like this creates an imbalance: part of the budget is invested in performance, while storage capacity and load times remain entry-level.`],
   [/^💰 Переплата за (.+)$/g, '💰 Overpaying for $1'],
   [/^Ниже перечислены конкретные замечания по этой сборке\. Названия деталей взяты прямо из твоего текущего ПК\.$/g, 'The specific issues found in this build are listed below. Component names are taken directly from your current PC.'],
   [/^(.+?) — (топ|высокий|средний|начальный|бюджетный) компонент, и к нему претензий нет\. Но (.+?) — (топ|высокий|средний|начальный|бюджетный) уровень\. В такой связке более сильная деталь не сможет полностью раскрыть свой потенциал, потому что более слабая часть будет ограничивать систему\. Для экзамена лучше подбирать CPU и GPU примерно одного класса\.$/g, (m, stronger, strongerTier, weaker, weakerTier) => `${stronger} is a ${({'топ':'top-tier','высокий':'high-end','средний':'mid-range','начальный':'entry-level','бюджетный':'budget'}[strongerTier] || strongerTier)} component, and there are no complaints about it. However, ${weaker} is in the ${({'топ':'top-tier','высокий':'high-end','средний':'mid-range','начальный':'entry-level','бюджетный':'budget'}[weakerTier] || weakerTier)} class. In this combination, the stronger component cannot fully reach its potential because the weaker part limits the system. For the exam, it is better to choose a CPU and GPU from roughly the same performance class.`],
@@ -59,13 +64,13 @@ const I18N_EXACT = {
   '▶ Начать':'▶ Start',
   '🎓 Хочу пройти обучение':'🎓 Start my tutorial','🐢 Слабая или отсутствующая GPU':'🐢 Weak or missing GPU','CPU знает, что должно происходить, но картинка рисуется рывками.':'The CPU knows what should happen, but the picture is rendered with stutter.','⚡ Хороший CPU + хорошая GPU':'⚡ Good CPU + good GPU','CPU успевает давать задачи, а GPU успевает быстро рисовать кадры.':'The CPU keeps up with the tasks, and the GPU renders frames quickly.','CPU and GPU example':'CPU and GPU example','Я уже всё знаю':'I already know this','Выбери свой уровень знаний':'Choose your knowledge level','Выбери самый близкий вариант. Здесь нет правильного ответа — от этого зависит только то, с чего начнётся обучение.':'Choose the closest option. There is no right or wrong answer; it only changes where your course starts.','Ничего не знаю':'Complete beginner','Что-то слышал':'I have heard some terms','Знаю базу':'I know the basics','Хорошо разбираюсь':'I know my way around PCs','Готов собирать ПК':'Ready to build a PC','Не понимаю, чем CPU отличается от GPU и зачем вообще нужны детали.':"I don't know what a CPU or GPU is, or why the different parts are needed.",'Слышал про RTX 5090, Ryzen, Intel и другие известные названия.':'I have heard of the RTX 5090, Ryzen, Intel, and other familiar names.','Знаю, что такое FPS, пинг и некоторые основные комплектующие.':'I know what FPS and ping are, and I know some of the main PC parts.','Знаю основные компоненты, многие марки и понимаю базовую совместимость.':'I know the main components, many common brands, and the basics of compatibility.','Уже готов сам собрать компьютер в реальной жизни и хочу проверить знания.':'I am ready to build a PC in real life and want to test my knowledge.','PC BUILDER · ОБУЧЕНИЕ':'PC BUILDER · TRAINING','Пропустить':'Skip','Завершить':'Finish','Лайт-курс':'Light course','Урок':'Lesson','Первый ПК: с нуля':'First PC: from zero','Читаем железо':'Reading hardware','Баланс и совместимость':'Balance and compatibility','Практика начинается здесь':'Practice starts here','Лайт-режим теперь ведёт тебя по отдельному курсу: смотри подсказки и пробуй сам.':'Light Mode now guides you through a separate course: read the hints and try things yourself.','Продолжай сам':'Keep going yourself', '📂 Загрузить':'📂 Load','ℹ Информация':'ℹ Information','🏆 Достижения':'🏆 Achievements','⚙ Настройки':'⚙ Settings','🎓 Обучение':'🎓 Tutorial','↩ Продолжить текущую игру':'↩ Continue current game','Выбери режим':'Choose a mode','Один режим — одно прохождение.':'One mode — one playthrough.','← В меню':'← Back to menu',
   '🟢 Лёгкий':'🟢 Easy','Нормальный стартовый ПК':'Normal starter PC','🟡 Сложный':'🟡 Hard','Слабый ПК и маленький бюджет':'Weak PC and a small budget','🔴 Хардкор':'🔴 Hardcore','Практически голая система':'Almost bare system','🔵 Лайт':'🔵 Light','Спокойный режим без лишней экономики и случайных событий. При запуске можно включить новое обучение.':'A calm mode without extra economy or random events. You can enable the new tutorial when starting.',
-  '🎓 Лайт-режим':'🎓 Light mode','Включить новое обучение?':'Enable the new tutorial?','По умолчанию обучение выключено. При включении подсказки будут объяснять комплектующие и помогать разбирать ошибки прямо во время этого прохождения.':'The tutorial is disabled by default. When enabled, hints will explain components and help you understand mistakes during this playthrough.','Включить обучение в этом прохождении':'Enable the tutorial for this playthrough','Начать Лайт':'Start Light','Назад':'Back',
+  '🎓 Лайт-режим':'🎓 Light mode','Включить новое обучение?':'Enable the new tutorial?','По умолчанию обучение выключено. При включении подсказки будут объяснять комплектующие и помогать разбирать ошибки прямо во время этого прохождения.':'The tutorial is disabled by default. When enabled, hints will explain components and help you understand mistakes during this playthrough.','Включить обучение в этом прохождении':'Enable the tutorial for this playthrough','Начать Лайт':'Start Light','Перейти к Лайту':'Go to Light','🛠 Полная проверка':'🛠 Complete Check','Назад':'Back',
   '⚠ Хардкор':'⚠ Hardcore','Хардкор очень сложен.':'Hardcore is very difficult.','Этот режим создан только для тех, кто уже умеет обращаться с компьютерами и готов к жёстким ограничениям, поломкам и сложной сборке.':'This mode is only for players who already know their way around computers and are ready for harsh restrictions, failures, and demanding builds.','Действительно хочешь продолжить?':'Are you sure you want to continue?','Да, продолжить':'Yes, continue','Нет, назад':'No, go back',
   '🖥️ Мой ПК':'🖥️ My PC','Купоны':'Coupons','Мощность ПК':'PC Power','🎮 Заработок':'🎮 Earnings','Награда зависит от ПК':'Reward depends on PC','📝 Экзамен':'📝 Exam','🎮 Мини-игры':'🎮 Mini-games','🤖 Обучение ИИ':'🤖 AI Training','💻 Программирование':'💻 Programming','💤 Обычный AFK':'💤 Normal AFK','🔥 Разгон':'🔥 Overclock','Получаешь деньги каждую секунду. Никакого контроля.':'You earn money every second. No supervision needed.','×5 дохода, но нужны минимум 16 ГБ RAM и периодический контроль компонентов.':'×5 income, but you need at least 16 GB RAM and periodic component checks.',
-  '🛒 Магазин комплектующих':'🛒 Component Shop','💾 Сохранить':'💾 Save','Сбросить':'Reset','Каталог открыт в отдельном окне.':'The catalog opens in a separate window.','Открыть каталог':'Open catalog','⛓️ Чёрный рынок':'⛓️ Black Market','🎓 Обучение':'🎓 Tutorial',
+  '🛒 Магазин комплектующих':'🛒 Component Shop','💾 Сохранить':'💾 Save','Сбросить':'Reset','Каталог открыт в отдельном окне.':'The catalog opens in a separate window.','Открыть каталог':'Open catalog','Чёрный рынок':'Black Market','🎓 Обучение':'🎓 Tutorial',
   '💿 Операционная система':'💿 Operating System','🛠 Проверка ПК':'🛠 PC Check','💾 Сохранения':'💾 Saves','📂 Загрузка сохранения':'📂 Load Save','⚠ Сброс прохождения':'⚠ Reset Playthrough','📝 Экзамен':'📝 Exam','📦 Экзамен завершён':'📦 Exam Finished','🔎 Разбор ошибок':'🔎 Error Analysis','🏆 Достижения':'🏆 Achievements','📜 Update Log':'📜 Update Log',
   'Закрыть':'Close','Понятно':'Got it','Далее':'Next','Пройти обучение':'Start the tutorial','Пропустить обучение':'Skip the tutorial','Завершить':'Finish','Пропустить':'Skip','Ты правда хочешь пропустить обучение? Если ты разбираешься в компьютерах, то можешь смело это делать.':'Are you sure you want to skip the tutorial? If you already understand computers, you can safely do so.','Отказаться':'Cancel','← Назад':'← Back','Установить':'Install','Продать':'Sell','Купить':'Buy','Установлено':'Installed','Продажа запрещена':'Sale forbidden','Показать Go beyond...':'Show Go beyond...','✅ Получено':'✅ Unlocked','🔒 Заблокировано':'🔒 Locked',
-  'Привет. Я PC Builder.':"Hi. I'm PC Builder.",'Что здесь вообще делают?':'What do you do here?','Это симулятор сборки ПК. Здесь ты собираешь компьютер из отдельных компонентов, проверяешь их совместимость, изучаешь более мощные системы, покупаешь и устанавливаешь компоненты, а позже переходишь к более сложным игровым механикам. Я буду постепенно объяснять, что происходит, простыми словами, поэтому предварительные знания о компьютерах не нужны.':'This simulator is about building PCs. Here, you build a computer from separate components, check their compatibility, look at more powerful systems, buy and install components, and later progress to more difficult game mechanics. I will gradually explain what is happening in simple words, so no prior knowledge about computers is needed.','Лайт-режим — это только урезанная версия игры для новичков: в нём убраны лишняя экономика и сложные механики, чтобы сначала спокойно разобраться в основе. Хочешь пройти обучение в Лайт-режиме или сразу его пропустить?':'A computer is not one component, but a system made up of several components. The processor performs calculations, RAM temporarily stores data for running programs, the graphics card processes graphics, the storage drive stores files, the power supply provides power, the motherboard connects the components, cooling dissipates heat, and the case holds everything inside. The main task when building a PC is not just to buy powerful components, but to choose ones that are physically and technically compatible with each other. Light Mode is only a stripped-down version of the game for new players: it removes unnecessary economy and difficult mechanics so that you can first calmly learn the basics. Do you want to go through the tutorial in Light Mode or skip it immediately?','PC BUILDER · ПЕРВЫЙ ЗАХОД':'PC BUILDER · FIRST VISIT','PC BUILDER · ПЕРЕД ПРАКТИКОЙ':'PC BUILDER · BEFORE PRACTICE',  'В этом разделе пока ничего нет.':'Nothing here yet.','Открыть':'Open','Разделы заработка':'Earnings sections','Тема оформления':'Theme','🌙 Тёмная':'🌙 Dark','☀️ Светлая':'☀️ Light','Анимации интерфейса':'Interface animations','Отключает часть визуальных эффектов.':'Disables some visual effects.','Предупреждение о полиции':'Police warning','Показывать предупреждение перед продажей деталей с чёрного рынка. Можно отключить здесь или прямо в окне продажи.':'Show a warning before selling black-market components. You can disable it here or directly in the sale window.','⛶ Полноэкранный режим':'⛶ Fullscreen','⛶ Выйти из полноэкранного режима':'⛶ Exit fullscreen','Настройки сохраняются отдельно от прохождения.':'Settings are saved separately from the playthrough.',
+  'Привет. Я PC Builder.':"Hi. I'm PC Builder.",'Что здесь вообще делают?':'What do you do here?','Это симулятор сборки ПК. Здесь ты собираешь компьютер из отдельных компонентов, проверяешь их совместимость, изучаешь более мощные системы, покупаешь и устанавливаешь компоненты, а позже переходишь к более сложным игровым механикам. Я буду постепенно объяснять, что происходит, простыми словами, поэтому предварительные знания о компьютерах не нужны.':'This simulator is about building PCs. Here, you build a computer from separate components, check their compatibility, look at more powerful systems, buy and install components, and later progress to more difficult game mechanics. I will gradually explain what is happening in simple words, so no prior knowledge about computers is needed.','Лайт-режим — это только урезанная версия игры для новичков: в нём убраны лишняя экономика и сложные механики, чтобы сначала спокойно разобраться в основе. Хочешь пройти обучение в Лайт-режиме или сразу его пропустить?':'A computer is not one component, but a system made up of several components. The processor performs calculations, RAM temporarily stores data for running programs, the graphics card processes graphics, the storage drive stores files, the power supply provides power, the motherboard connects the components, cooling dissipates heat, and the case holds everything inside. The main task when building a PC is not just to buy powerful components, but to choose ones that are physically and technically compatible with each other. Light Mode is only a stripped-down version of the game for new players: it removes unnecessary economy and difficult mechanics so that you can first calmly learn the basics. Do you want to go through the tutorial in Light Mode or skip it immediately?','PC BUILDER · ПЕРВЫЙ ЗАХОД':'PC BUILDER · FIRST VISIT','PC BUILDER · ПЕРЕД ПРАКТИКОЙ':'PC BUILDER · BEFORE PRACTICE',  'Сначала собери рабочий ПК в Лайте, доведи его до требований экзамена и пройди проверку. После успешной сдачи доступ сохранится.':'First, build a working PC in Light Mode, reach the exam requirements, and complete the check. After successfully passing the exam, access will be saved.','В этом разделе пока ничего нет.':'Nothing here yet.','Открыть':'Open','Разделы заработка':'Earnings sections','Тема оформления':'Theme','🌙 Тёмная':'🌙 Dark','☀️ Светлая':'☀️ Light','Анимации интерфейса':'Interface animations','Отключает часть визуальных эффектов.':'Disables some visual effects.','Предупреждение о полиции':'Police warning','Показывать предупреждение перед продажей деталей с чёрного рынка. Можно отключить здесь или прямо в окне продажи.':'Show a warning before selling black-market components. You can disable it here or directly in the sale window.','⛶ Полноэкранный режим':'⛶ Fullscreen','⛶ Выйти из полноэкранного режима':'⛶ Exit fullscreen','Настройки сохраняются отдельно от прохождения.':'Settings are saved separately from the playthrough.',
   'Язык / Language':'Language','Choose the language used throughout the website.':'Choose the language used throughout the website.','Language':'Language','🇬🇧 English':'🇬🇧 English','🇷🇺 Русский':'🇷🇺 Russian','Язык':'Language',
   'Лайт-режим':'Light mode','Здесь нет рынка, случайных цен, купонов, чёрного рынка, событий, SOLD OUT, рероллов, операционной системы и мини-игр. Сейчас мы спокойно учимся собирать рабочий ПК.':'There is no market, random pricing, coupons, black market, events, SOLD OUT, rerolls, operating system, or mini-games here. We can calmly learn how to build a working PC.',
   '💵 Нужны деньги на детали?':'💵 Need money for components?','В Лайте деньги выдаёт только этот простой кликер.':'In Light mode, this simple clicker is the only source of money.','Получить $10':'Get $10','Кликов: 0':'Clicks: 0',
@@ -76,7 +81,7 @@ const I18N_EXACT = {
   '— игра про сборку ПК, мини-игры, заработок и апгрейды.':'— a game about building PCs, mini-games, earning money, and upgrades.','Чем лучше твоя сборка, тем выше потенциальный заработок в мини-играх. Комплектующие покупаются в динамическом магазине, а установленные детали можно менять.':'The better your build, the higher your potential mini-game earnings. Components are bought from the dynamic shop, and installed parts can be replaced.',
   'Текущее прохождение будет удалено из активного слота. Хочешь сначала сохранить его?':'The current playthrough will be removed from the active slot. Do you want to save it first?','💾 Сохранить и сбросить':'💾 Save and reset','Сбросить без сохранения':'Reset without saving','Отмена':'Cancel','Да, начать экзамен':'Yes, start the exam','Нет, назад':'No, go back',
   'Понятно, вернуться к сборке':'Got it, return to the build',  'Сдай экзамен на 95 или больше баллов.':'Pass the exam with a score of 95 or higher.',
-'Хорошо, закончить обучение':'Okay, finish the tutorial','Экзамен завершён. Хочешь сохранить это прохождение?':'The exam is finished. Do you want to save this playthrough?','Собирай определённые конфигурации и открывай достижения. Полученное достижение остаётся навсегда.':'Build specific configurations and unlock achievements. An unlocked achievement stays forever.','Можно купить одну деталь даже при SOLD OUT.':'You can buy one component even when it is SOLD OUT.','Достижение получено!':'Achievement unlocked!','Компенсация за БП':'PSU compensation',
+'Хорошо, закончить обучение':'Okay, finish the tutorial','Экзамен завершён. Хочешь сохранить это прохождение?':'The exam is finished. Do you want to save this playthrough?','🔓 Доступ сохранён: Хардкор и «Проблема» останутся открыты после выхода из Лайта.':'🔓 Access saved: Hardcore and Problem Mode will remain unlocked after leaving Light Mode.','Собирай определённые конфигурации и открывай достижения. Полученное достижение остаётся навсегда.':'Build specific configurations and unlock achievements. An unlocked achievement stays forever.','Можно купить одну деталь даже при SOLD OUT.':'You can buy one component even when it is SOLD OUT.','Достижение получено!':'Achievement unlocked!','Компенсация за БП':'PSU compensation',
   'Компоненты некуда подключить.':'There is nowhere to connect the components.','Без RAM система не сможет нормально пройти POST.':'Without RAM, the system cannot complete POST normally.','Операционной системе неоткуда загружаться.':'The operating system has nowhere to boot from.','Системе нечем получать питание.':'The system has no power source.','Для запуска нужен установленный загрузочный образ ОС.':'A bootable operating system image is required.',
   'Покупка недоступна: товар больше нельзя купить по текущему состоянию рынка.':'Purchase unavailable: this item cannot currently be bought because of the market state.','Деталь отправлена в инвентарь.':'The component was sent to your inventory.','Получено достижение':'Achievement unlocked','Продажа детали':'Component sale','Шанс быть обнаруженным при продаже':'Chance of being detected while selling','При обнаружении штраф составит':'If detected, the fine will be','Покупки заблокированы':'Purchases are blocked','выплаты −10%':'payouts −10%','Покупка недоступна':'Purchase unavailable','Чёрный рынок закрыт':'Black Market is closed','или товар уже куплен':'or the item was already purchased','чёрном рынке':'Black Market','Куплено на чёрном рынке':'Purchased on the Black Market',
 
@@ -427,7 +432,97 @@ function localizeNode(root=document){
   root.querySelectorAll?.('input[placeholder],textarea[placeholder],[title],[aria-label]').forEach(el=>{if(shouldSkipLocalizationNode(el))return;['placeholder','title','aria-label'].forEach(attr=>{if(el.hasAttribute(attr)){const v=el.getAttribute(attr),t=translateRuText(v);if(t!==v)el.setAttribute(attr,t);}});});
 }
 
-const UPDATE_LOG_EN = `v2.0.7 — GUIDED TRAINING, LIGHT MODE PRACTICE, AND STARTER SYNC
+const UPDATE_LOG_EN = `v2.0.17 — IDEAL COMPATIBILITY SCORING AND LIGHT STARTER SYNC
+
+- Fixed the English translation of the Basic Power Supply problem so the title and full explanation are entirely in English.
+- Reworked the “Ideal Compatibility” exam criterion: it now scores how well the CPU, GPU, RAM, motherboard, PSU, cooling, storage, and case are matched by performance class and system level instead of simply checking whether the PC works.
+- Strong CPU/GPU bottlenecks can now receive 0/8 for the pairing portion, while well-matched adjacent performance classes can still receive the full pairing score.
+- Kept a reachable 20/20 Ideal Compatibility score, so a genuinely well-balanced build can still reach 100/100 overall.
+- Synchronized the Light Mode starter storage with the catalog 256 GB SATA SSD.
+- Synchronized the Light Mode starter cooling with the catalog Stock Cooler.
+- Synchronized the Light Mode starter case with the catalog Regular Case.
+- Added migration for existing Light Mode saves that still use the old starter RAM, storage, case, or cooling IDs.
+- Project version: v2.0.17.
+
+v2.0.16 — COMPLETE LIGHT MODE TRAINING AND EXAM PATH
+
+- Extended the guided Light Mode course so it no longer ends after the basic component lessons. The player is now guided toward a real working PC and the exam requirements.
+- Added a dynamic 250+ PC power goal: the player may choose their own upgrades instead of following a memorized fixed build.
+- Added a dedicated “Complete Check” button in Light Mode. It runs the full compatibility check and is used as the final practical checkpoint before the exam.
+- The guided course now finishes only after the build reaches 250+ power and passes the complete compatibility check.
+- The Light Mode starter RAM now uses the actual catalog item “8 GB DDR3” directly, keeping the starting memory exactly synchronized with the catalog.
+- Fixed the English advanced-access button to read “Go to Light” instead of leaking the Russian text.
+- Passing the Light Mode exam still stores the access flag separately, so Hardcore and Problem Mode remain unlocked after the exam even if the Light playthrough is closed or reset.
+- Fixed mixed Russian text in the English advanced-access and exam feedback messages.
+- Fixed the Light Mode Black Market control so neither the market button nor its lock icon appears in Light Mode.
+- Fixed the 250+ power training step so the power number is not highlighted, the screen is not darkened, and the catalog remains freely usable while building.
+- Fixed the Light Mode Complete Check flow: the diagnostic modal can now be closed normally, the training click guard no longer blocks the modal, and failed checks return to the same task instead of freezing the course.
+- Project version: v2.0.16.
+
+v2.0.15 — EXAM GATES AND EXPANDED PROBLEM MODE
+
+- Hardcore and Problem Mode are locked until the Light Mode exam is successfully passed.
+- Added a persistent Light exam access flag so a successful exam keeps Hardcore and Problem Mode unlocked after leaving or resetting the Light playthrough.
+- Expanded Problem Mode to 750 generated cases: 150 cases for each difficulty, with varied clean and problematic configurations.
+- Added simple CSS lock visuals to gated modes instead of chain graphics.
+
+v2.0.14 — PROBLEM MODE FORENSIC TRAPS
+
+- Bottleneck is no longer treated as a problem: deliberately unbalanced but fully compatible builds are now clean trap cases.
+- Added a clean i9-14900K + integrated-graphics trap: lack of a discrete GPU is not automatically an error when the CPU has integrated graphics.
+- Added fake manufacturers/companies and falsified component specifications to early difficulties 1–2.
+- GPU physical length is now shown only from difficulty 3 onward.
+- Added form-factor data for motherboards, cases and PSUs, with dedicated form-factor mismatch cases on difficulties 4–5.
+- Added hidden form-factor checks without exposing generic clearance or maximum-RAM shortcuts.
+- Kept F-suffix traps rare and removed bottleneck traps from the problem answer pool.
+- Added detailed form-factor rows to the forensic component panels.
+- Project version: v2.0.14.
+
+v2.0.13 — PROBLEM MODE BUG FIXES AND FAIR CASES
+
+- Removed the extra “Certification: ...” line from PSU cards in Problem Mode. Fake certification claims must now be discovered inside the detailed specifications.
+- Removed direct motherboard hints for RAM type and maximum memory capacity.
+- Removed direct case limits for GPU length and cooler height. These must now be checked independently.
+- Reduced CPU F-suffix traps to rare individual cases instead of repeating them constantly.
+- Strengthened levels 4–5 with hidden CPU/GPU balance checks, specification contradictions, certification traps and release-date checks.
+- Added a clean flagship build with Windows XP: an old OS by itself does not make a build invalid.
+- Corrected the GIGABYTE Z790 AORUS MASTER X release year to 2023.
+- Fixed Problem Mode case generation so every difficulty has exactly 50 cases: 35 problematic and 15 clean.
+- Removed accidental extra compatibility errors from high-difficulty cases. Each puzzle now contains only the intended faults.
+- Limited F-suffix traps to one dedicated case per level 4 and 5.
+- Problem Mode no longer displays motherboard max-RAM or direct case-clearance limits; those values must be checked independently.
+- Fixed starter 8 GB DDR3 consistency: the starting memory and starter motherboard now use DDR3 rules.
+- Corrected GPU reference dimensions used by Problem Mode for RTX 2070, RTX 4070/4070 SUPER, RTX 4080 SUPER and RX 7800 XT.
+- Fixed mobile Problem Mode drawer/result positioning so panels stay attached to the viewport.
+- Removed dead Problem Mode certificate-card CSS.
+- Removed duplicate build layouts inside individual difficulty pools so each difficulty now contains 50 unique PC configurations.
+- Repaired all generated physical-fit cases so the selected GPU and case are the actual components in the build.
+- Repaired starter 8 GB DDR3 compatibility logic so the starter RAM is consistently treated as DDR3.
+- Final audit: all 250 cases have exactly their intended faults and clean cases have no compatibility faults.
+- Project version: v2.0.13.
+
+v2.0.11 — PROBLEM MODE REBALANCE
+
+- Rebuilt all five difficulty pools so each level now targets a different kind of mistake instead of mixing obvious and advanced builds.
+- Difficulty 1 now focuses on straightforward compatibility, power, storage, cooling and capacity checks.
+- Difficulty 4 now uses subtle platform limits, physical fit, CPU suffixes and specification comparisons.
+- Difficulty 5 is now the deepest audit level: release-year checks, GDDR/VRAM traps, F-suffix integrated-graphics traps, fake PSU certification contradictions and multi-part hidden mistakes.
+- Clean rounds remain exactly 30% of every difficulty (15 of 50).
+
+v2.0.10 — HARDER PROBLEM MODE AND RESULT FEEDBACK\n\n- Made levels 4 and 5 much less obvious: added CPU suffix traps, hidden GPU specification traps, subtle RAM/platform mismatches, physical size checks and multi-layer mistakes.\n- Added a PSU certification line directly to the component card so a fake certificate can contradict the title while also appearing in the detailed specifications.\n- Added a yellow “Partially correct” result when the player finds some, but not all, correct problem components without selecting extra wrong components.\n- Added more deceptive high-difficulty cases built around details that require opening the component specifications.\n\nv2.0.9 — EXPANDED PROBLEM MODE\n\n- Expanded every difficulty to 50 cases: 35 problem cases and 15 clean builds.\n- Added a runtime 30% chance that a round contains no problem at all.\n- Added GPU memory type (GDDR) and VRAM to component specifications.\n- Added release years to technical specifications and new release-year trap problems.\n- Added fake PSU certification claims as a new Problem mode trap.\n- Added physical size checks for GPU length, case clearance, and CPU cooler height.\n- Added many multi-part cases with several independent faults.\n- Added GeForce RTX 2070 to the catalog with GDDR6 and the corresponding PSU recommendation.\n
+v2.0.8 — NEW “PROBLEM” MODE
+
+- Added a new Problem mode: the player receives a finished PC build, but the game does not reveal whether it contains a mistake.
+- The player chooses one of five difficulty levels before starting.
+- Components are placed in the center, instructions are shown at the top, and the Confirm button is fixed in the bottom-right corner.
+- Clicking a component opens a slide-up panel with its specifications.
+- The end of the panel contains a Select button. Multiple components can be selected when a problem involves several parts.
+- If the player thinks the build is completely fine, they can select nothing and simply confirm.
+- Problem types include platform and RAM mismatches, an underpowered PSU, insufficient cooling, CPU/GPU imbalance, a tiny drive for Windows 11, and multi-part problems.
+- After confirmation, the game shows the correct answer and explains the problem, then allows another challenge.
+- The mode is fully separate from the normal playthrough and does not modify the current build, money, or saves.
+
+v2.0.7 — GUIDED TRAINING, LIGHT MODE PRACTICE, AND STARTER SYNC
 
 - Reworked first-visit onboarding into a five-level knowledge selector, from complete beginner to ready to build a PC in real life.
 - Added separate training depth and terminology for each knowledge level.
@@ -619,7 +714,7 @@ function initLocalization(){
   document.documentElement.lang=currentLanguage();
   updateBootLoadingText();
   if(isEnglish()){
-    document.title='PC Builder — v2.0.7';
+    document.title='PC Builder — v2.0.17';
     const observer=new MutationObserver((records)=>{for(const record of records){if(record.type==='characterData'){if(shouldSkipLocalizationNode(record.target))continue;const t=translateRuText(record.target.nodeValue);if(t!==record.target.nodeValue)record.target.nodeValue=t;} else record.addedNodes.forEach(node=>{if(shouldSkipLocalizationNode(node))return;if(node.nodeType===Node.TEXT_NODE){const t=translateRuText(node.nodeValue);if(t!==node.nodeValue)node.nodeValue=t;}else if(node.nodeType===Node.ELEMENT_NODE)localizeNode(node);});}});
     observer.observe(document.body,{childList:true,subtree:true,characterData:true});
     window.__pcBuilderI18nObserver=observer;
@@ -629,7 +724,90 @@ function initLocalization(){
 }
 initLocalization();
 
-const UPDATE_LOG = `v2.0.7 — ПОШАГОВОЕ ОБУЧЕНИЕ, ПРАКТИКА В ЛАЙТЕ И СИНХРОНИЗАЦИЯ СТАРТА
+const UPDATE_LOG = `v2.0.17 — ИДЕАЛЬНАЯ СОВМЕСТИМОСТЬ И СИНХРОНИЗАЦИЯ СТАРТОВЫХ ДЕТАЛЕЙ
+
+- Исправлен английский текст проблемы про слишком простой блок питания: заголовок и описание теперь полностью на английском.
+- Критерий «Идеальная совместимость» в экзамене переработан: теперь он оценивает не сам факт работоспособности ПК, а то, насколько хорошо CPU, GPU, RAM, материнская плата и остальные детали подобраны по классу производительности и общему уровню системы.
+- Сильный боттлнек CPU/GPU теперь может дать 0/8 за связку, а хорошо подобранная пара соседних классов всё ещё может получить полный балл за эту часть.
+- Получить 20/20 за «Идеальную совместимость» по-прежнему возможно, поэтому 100/100 за действительно удачную сборку остаётся достижимым.
+- Стартовый накопитель Лайт-режима синхронизирован с каталоговым 256 GB SSD SATA.
+- Стартовое охлаждение Лайт-режима синхронизировано с каталоговым Stock Cooler.
+- Стартовый корпус Лайт-режима синхронизирован с каталоговым Regular Case.
+- Для старых сохранений Лайт-режима добавлена миграция со старых ID стартовой RAM, накопителя, корпуса и охлаждения.
+- Версия проекта: v2.0.17.
+
+v2.0.16 — ПОЛНОЕ ОБУЧЕНИЕ ЛАЙТ-РЕЖИМА И ПУТЬ К ЭКЗАМЕНУ
+
+- Пошаговый курс Лайта больше не заканчивается после базового знакомства с деталями. Теперь он доводит игрока до рабочего ПК и требований экзамена.
+- Добавлена динамическая цель 250+ мощности: игрок сам выбирает апгрейды, а обучение не заставляет запоминать один конкретный набор деталей.
+- В Лайте появилась отдельная кнопка «🛠 Полная проверка». Она запускает полную проверку совместимости и становится финальной практической точкой перед экзаменом.
+- Курс считается завершённым только после достижения 250+ мощности и успешной полной проверки совместимости.
+- Стартовая RAM Лайт-режима теперь использует непосредственно каталоговую деталь «8 GB DDR3», поэтому стартовая память полностью синхронизирована с каталогом.
+- Исправлен английский текст кнопки перехода к Лайту: теперь отображается «Go to Light».
+- Успешная сдача экзамена по-прежнему сохраняет доступ отдельным флагом, поэтому Хардкор и «Проблема» остаются открыты после закрытия или сброса Лайт-прохождения.
+- Исправлен смешанный русский текст в английских сообщениях доступа и результата экзамена.
+- В Лайт-режиме полностью скрыт элемент чёрного рынка вместе с его замком: ни кнопка, ни маленький ключ больше не отображаются.
+- Версия проекта: v2.0.16.
+
+v2.0.15 — ЭКЗАМЕННЫЕ ОГРАНИЧЕНИЯ И РАСШИРЕНИЕ РЕЖИМА «ПРОБЛЕМА»
+
+- Хардкор и «Проблема» блокируются до успешной сдачи экзамена в Лайт-режиме.
+- Добавлен отдельный сохраняемый флаг успешного экзамена Лайта: после сдачи доступ к Хардкору и «Проблеме» сохраняется после выхода или сброса Лайт-прохождения.
+- Режим «Проблема» расширен до 750 сгенерированных кейсов: по 150 вариантов на каждую сложность, с разными чистыми и проблемными сборками.
+- Для заблокированных режимов добавлены обычные CSS-замки вместо графики цепей.
+
+v2.0.14 — НОВЫЕ ХИТРЫЕ ЛОВУШКИ РЕЖИМА «ПРОБЛЕМА»
+
+- Боттлнек больше не считается ошибкой: намеренно несбалансированные, но полностью совместимые сборки теперь являются чистыми ловушками.
+- Добавлена чистая ловушка i9-14900K + встроенная графика: отсутствие отдельной видеокарты само по себе не является ошибкой, если процессор имеет встроенную графику.
+- На 1–2 уровнях добавлены фальшивые производители и выдуманные компании с поддельными характеристиками деталей.
+- Длина видеокарты теперь показывается только начиная с 3 уровня сложности.
+- Добавлены форм-факторы материнских плат, корпусов и БП, а на 4–5 уровнях появились отдельные ошибки на несовпадение форм-факторов.
+- Форм-факторы проверяются отдельно, без возврата прямых подсказок по зазорам корпуса или максимальному объёму RAM.
+- Ловушки на F-суффикс остаются редкими, а боттлнеки удалены из пула настоящих проблем.
+- В выдвижную панель характеристик добавлены строки форм-факторов.
+- Версия проекта: v2.0.14.
+
+v2.0.13 — ИСПРАВЛЕНИЕ РЕЖИМА «ПРОБЛЕМА» И ЧЕСТНЫЕ КЕЙСЫ
+
+- Убрана отдельная строка «Сертификат: ...» из карточек БП в режиме «Проблема». Фальшивый сертификат теперь нужно обнаружить внутри подробных характеристик.
+- Из характеристик материнских плат убраны прямые подсказки о типе RAM и максимальном объёме памяти.
+- Из характеристик корпусов убраны прямые лимиты длины видеокарты и высоты кулера. Теперь эти вещи нужно проверять самостоятельно.
+- Ловушки на F-суффиксы CPU сокращены до редких отдельных кейсов и больше не должны сыпаться постоянно.
+- Уровни 4–5 усилены скрытыми проверками баланса CPU/GPU, характеристик, сертификатов и дат выпуска.
+- Добавлен чистый флагманский кейс с Windows XP: старая ОС сама по себе не делает сборку ошибочной.
+- Исправлен год выпуска GIGABYTE Z790 AORUS MASTER X: 2023.
+- Режим «Проблема» теперь всегда содержит ровно 50 кейсов на каждой сложности: 35 с ошибками и 15 чистых.
+- Убраны случайные дополнительные проблемы внутри кейсов высокой сложности. Теперь игроку засчитываются именно задуманные ошибки.
+- Ловушки с суффиксом F ограничены отдельным кейсом на 4 и 5 уровнях.
+- Из Problem Mode убраны прямые подсказки по максимальному объёму RAM и лимитам корпуса. Эти значения нужно проверять самостоятельно.
+- Стартовая память 8 GB DDR3 теперь полностью согласована с DDR3-логикой стартовой материнской платы.
+- Исправлены используемые Problem Mode референсные размеры RTX 2070, RTX 4070/4070 SUPER, RTX 4080 SUPER и RX 7800 XT.
+- Исправлено положение нижней панели характеристик и результата на мобильных экранах.
+- Удалён неиспользуемый CSS для отдельной строки сертификата в карточке Problem Mode.
+- Версия проекта: v2.0.13.
+
+v2.0.11 — ПЕРЕБАЛАНСИРОВКА РЕЖИМА «ПРОБЛЕМА»
+
+- Все пять уровней режима «Проблема» переработаны: теперь сложность определяет не только количество ошибок, но и то, насколько глубоко нужно проверять характеристики.
+- 1 уровень теперь сосредоточен на понятных проверках совместимости, питания, накопителя, охлаждения и объёма памяти.
+- 4 уровень получил скрытые несовпадения платформ, лимитов, размеров, суффиксов CPU и характеристик.
+- 5 уровень стал самым сложным: добавлены проверки годов выпуска, GDDR/VRAM, ловушки с F-суффиксами, встроенной графикой, фальшивыми сертификатами БП и многосоставными скрытыми ошибками.
+- Чистые раунды остаются ровно 30% каждого уровня: 15 из 50.
+
+v2.0.10 — УСЛОЖНЕНИЕ РЕЖИМА «ПРОБЛЕМА» И ОБРАТНАЯ СВЯЗЬ\n\n- Уровни 4 и 5 теперь значительно менее очевидные: добавлены ловушки на суффиксы CPU, скрытые характеристики GPU, тонкие несовпадения RAM и платформы, физические размеры и многоуровневые ошибки.\n- Сертификат БП теперь показывается прямо в карточке компонента, поэтому фальшивый сертификат может противоречить названию карточки и подробным характеристикам.\n- Добавлен жёлтый результат «Частично правильно», если игрок нашёл часть правильных проблем и не отметил лишние неправильные детали.\n- Добавлено больше хитрых кейсов высокой сложности, где нужно открывать характеристики и сопоставлять несколько деталей.\n\nv2.0.9 — РАСШИРЕНИЕ РЕЖИМА «ПРОБЛЕМА»\n\n- Каждый уровень сложности расширен до 50 кейсов: 35 с ошибками и 15 полностью исправных сборок.\n- Добавлен отдельный 30% шанс на раунд без ошибки.\n- В характеристики видеокарт добавлены тип памяти GDDR и объём VRAM.\n- В технические характеристики добавлены годы выпуска и новые ловушки на неверные даты.\n- Добавлены фальшивые сертификаты БП как отдельный тип проблемы.\n- Добавлены физические проверки длины GPU, лимита корпуса и высоты кулера.\n- Добавлено много составных задач сразу с несколькими независимыми проблемами.\n- В каталог добавлена GeForce RTX 2070 с GDDR6 и соответствующей рекомендацией по БП.\n\nv2.0.8 — НОВЫЙ РЕЖИМ «ПРОБЛЕМА»
+
+- Добавлен новый режим «Проблема»: игрок получает готовую сборку, но игра не сообщает, есть ли в ней ошибка.
+- Перед началом выбирается одна из пяти уровней сложности.
+- В центре экрана находятся комплектующие, сверху показана инструкция, а кнопка «Подтвердить» закреплена снизу справа.
+- Нажатие на компонент открывает снизу выдвигающуюся панель с его характеристиками.
+- В конце панели находится кнопка «Выбрать». Можно отметить несколько компонентов, если проблема связана сразу с несколькими деталями.
+- Если игрок считает, что сборка полностью исправна, он может ничего не выбирать и сразу подтвердить ответ.
+- В заданиях используются несовместимые платформы и RAM, слишком слабый БП, слишком слабое охлаждение, дисбаланс CPU/GPU, слишком маленький накопитель для Windows 11 и составные ошибки.
+- После подтверждения показывается правильный ответ и объяснение проблемы, после чего можно запустить следующую задачу.
+- Режим полностью отделён от обычного прохождения и не меняет текущую сборку, баланс денег или сохранения.
+
+v2.0.7 — ПОШАГОВОЕ ОБУЧЕНИЕ, ПРАКТИКА В ЛАЙТЕ И СИНХРОНИЗАЦИЯ СТАРТА
 
 - Первый запуск переработан в выбор из пяти уровней знаний: от полного новичка до человека, готового собрать ПК в реальной жизни.
 - Для каждого уровня используются свои глубина обучения и терминология.
@@ -1343,54 +1521,6 @@ function renderKnowledgeTrainingStep(animate=false){
 function knowledgeLightTrainingActive(){
   return isLightMode() && !!state?.knowledgeLightTraining?.active;
 }
-function startKnowledgeLightCourse(level){
-  start('light');
-  state.lightTrainingEnabled=true;
-  state.knowledgeLightTraining={level:Number(level),lesson:0,active:true,completed:false};
-  lightTrainingActive=true;
-  firstVisitTrainingActive=false;
-  save();
-  render();
-  setTimeout(()=>showKnowledgeLightLesson('enter'),320);
-}
-function completeKnowledgeLightCourse(){
-  if(!state?.knowledgeLightTraining)return;
-  state.knowledgeLightTraining.completed=true;
-  state.knowledgeLightTraining.active=false;
-  state.lightTrainingEnabled=false;
-  lightTrainingActive=false;
-  save();
-  render();
-  lightCoachEvent('finish', isEnglish()?'Course complete':'Курс завершён', isEnglish()?'You can keep practicing in Light Mode. The coach will stay available for normal contextual hints.':'Ты прошёл практический курс. В Лайт-режиме можно продолжать экспериментировать, а обычный помощник будет подсказывать по ситуации.',14000,true);
-}
-function showKnowledgeLightLesson(action,item=null){
-  const courseState=state?.knowledgeLightTraining;
-  const level=Number(courseState?.level);
-  const course=KNOWLEDGE_LIGHT_COURSES[level];
-  if(!courseState?.active||!course)return false;
-  const lesson=course.lessons?.[courseState.lesson];
-  if(!lesson)return false;
-  const matches=lesson.trigger===action
-    || (lesson.trigger==='install-cpu-gpu' && action==='install' && ['CPU','GPU'].includes(item?.category))
-    || (lesson.trigger==='install-ram-storage' && action==='install' && ['RAM','Storage'].includes(item?.category))
-    || (lesson.trigger==='install-power-cooling' && action==='install' && ['PSU','Cooling'].includes(item?.category))
-    || (lesson.trigger==='summary' && action==='summary');
-  if(!matches)return false;
-  const title=knowledgeLocalized(lesson.title), textValue=knowledgeLocalized(lesson.text);
-  lightCoachEvent('info',title,textValue,14000,true);
-  courseState.lesson += 1;
-  if(courseState.lesson >= course.lessons.length){
-    save();
-    setTimeout(()=>completeKnowledgeLightCourse(),1800);
-  }else if(courseState.lesson === course.lessons.length - 1 && lesson.trigger !== 'summary'){
-    save();
-    setTimeout(()=>showKnowledgeLightLesson('summary'),2600);
-  }else{
-    save();
-  }
-  renderLightModeUI();
-  return true;
-}
 function completeKnowledgeTraining(){
   localStorage.setItem(KNOWLEDGE_TRAINING_DONE_KEY,'1');
   if(knowledgeTrainingLevel) localStorage.setItem(KNOWLEDGE_LEVEL_KEY,String(knowledgeTrainingLevel));
@@ -1469,7 +1599,10 @@ function hasPriorPcBuilderData(){if(localStorage.getItem(FIRST_VISIT_DONE_KEY))r
 function renderLightModeUI(){
   const light=$('lightModeSection'),tabs=document.querySelector('.earn-tabs'),mini=$('miniGamesSection'),ai=$('aiSection'),programming=$('programmingSection'),afk=$('afkSection');
   if(!light||!tabs||!mini||!ai||!programming||!afk)return;
-  const active=isLightMode(),courseState=state?.knowledgeLightTraining,course=KNOWLEDGE_LIGHT_COURSES[Number(courseState?.level)];
+  const active=isLightMode(),courseState=state?.knowledgeLightTraining;
+  const level=Number(courseState?.level);
+  const guidedCourse=typeof guidedLightCourse==='function'?guidedLightCourse(level):null;
+  const course=guidedCourse||KNOWLEDGE_LIGHT_COURSES[level];
   const courseActive=active&&!!courseState?.active&&!!course;
   light.classList.toggle('hidden',!active);light.classList.toggle('active',active);tabs.classList.toggle('hidden',active);
   if(active){mini.classList.add('hidden');ai.classList.add('hidden');programming.classList.add('hidden');afk.classList.add('hidden');}
@@ -1482,8 +1615,9 @@ function renderLightModeUI(){
   const progressEl=$('lightTrainingProgress');
   if(progressEl){
     if(courseActive){
-      const current=Math.min(courseState.lesson+1,course.lessons.length),total=course.lessons.length;
-      const nextLesson=course.lessons[courseState.lesson];
+      const items=Array.isArray(course.tasks)?course.tasks:(Array.isArray(course.lessons)?course.lessons:[]);
+      const current=Math.min(Number(courseState.lesson||0)+1,items.length),total=items.length;
+      const nextLesson=items[Number(courseState.lesson||0)];
       progressEl.textContent=`${isEnglish()?'Task':'Задание'} ${current} / ${total} · ${nextLesson?knowledgeLocalized(nextLesson.title):(isEnglish()?'Finishing':'Завершаем')}`;
       progressEl.classList.add('active');
     }else{progressEl.textContent='';progressEl.classList.remove('active');}
@@ -1491,23 +1625,20 @@ function renderLightModeUI(){
   const shopHint=document.querySelector('.shop-launch p');if(shopHint)shopHint.textContent=active?(isEnglish()?'In Light Mode, ordinary components are always available at their base price.':'В Лайте все обычные детали доступны постоянно по базовой цене.'):(isEnglish()?'On Hardcore, the catalog becomes multi-level: manufacturer → series → details.':'На хардкоре каталог становится многоуровневым: производитель → серия → детали.');
   if(active){lightClickerCount=Number(state.lightClickerCount)||0;const count=$('lightClickerCount');if(count)count.textContent=`${isEnglish()?'Clicks':'Кликов'}: ${lightClickerCount}`;const btn=$('lightClickerBtn');if(btn)btn.textContent=`${isEnglish()?'Get':'Получить'} $${formatMoney(lightClickReward())}`;}
   const resetBtn=$('resetBtn');if(resetBtn)resetBtn.classList.toggle('hidden',active&&(firstVisitTrainingActive||courseActive));
+  const completeCheckBtn=$('lightCompleteCheckBtn');
+  if(completeCheckBtn){
+    completeCheckBtn.classList.toggle('hidden',!active);
+    completeCheckBtn.textContent=isEnglish()?'🛠 Complete Check':'🛠 Полная проверка';
+    completeCheckBtn.disabled=!active;
+  }
   const coach=$('lightCoach');if(coach&&(!active||(!firstVisitTrainingActive&&!lightTrainingActive&&!courseActive)))coach.classList.remove('show');
   renderLightExamButton();
 }
-function lightModeClick(){if(!isLightMode())return;const reward=lightClickReward();state.money+=reward;lightClickerCount=Number(state.lightClickerCount)||0;lightClickerCount+=1;state.lightClickerCount=lightClickerCount;save();const count=$('lightClickerCount');if(count)count.textContent=`Кликов: ${lightClickerCount}`;const btn=$('lightClickerBtn');if(btn)btn.textContent=`Получить $${formatMoney(lightClickReward())}`;$('money').textContent=formatMoney(state.money);if(lightClickerCount===1)lightCoachEvent('clicker','Деньги в Лайте.',`Кликер — единственный источник денег здесь. Сейчас один клик даёт $${formatMoney(reward)}, потому что множитель ПК составляет ×${pcMultiplier().toFixed(2)}. После улучшения ПК сумма за клик тоже вырастет.`,10000);}
 function clearLightCoachTimer(){if(lightCoachTimer){clearTimeout(lightCoachTimer);lightCoachTimer=null;}lightCoachRemainingMs=0;lightCoachHideStartedAt=0;}
 function scheduleLightCoachHide(ms=lightCoachRemainingMs){clearLightCoachTimer();lightCoachRemainingMs=Math.max(0,Number(ms)||0);if(!lightCoachRemainingMs||lightCoachHovering)return;lightCoachHideStartedAt=performance.now();lightCoachTimer=setTimeout(()=>{lightCoachTimer=null;lightCoachRemainingMs=0;lightCoachHideStartedAt=0;if(!lightCoachHovering)$('lightCoach')?.classList.remove('show');},lightCoachRemainingMs);}
 function bindLightCoachHover(){const coach=$('lightCoach');if(!coach||coach.dataset.hoverBound==='1')return;coach.dataset.hoverBound='1';coach.addEventListener('mouseenter',()=>{lightCoachHovering=true;if(lightCoachTimer){const elapsed=performance.now()-lightCoachHideStartedAt;lightCoachRemainingMs=Math.max(0,lightCoachRemainingMs-elapsed);clearTimeout(lightCoachTimer);lightCoachTimer=null;}});coach.addEventListener('mouseleave',()=>{lightCoachHovering=false;scheduleLightCoachHide();});}
 function lightCoachEvent(kind,title,text,duration=12000,force=false){if((!isLightMode()||(!firstVisitTrainingActive&&!lightTrainingActive))&&kind!=='finish')return;if(!force&&performance.now()<lightCoachCooldownUntil)return;const coach=$('lightCoach');if(!coach)return;bindLightCoachHover();const kindEl=$('lightCoachKind'),titleEl=$('lightCoachTitle'),textEl=$('lightCoachText');if(kindEl)kindEl.textContent=kind==='praise'?'✅ Хорошо':kind==='mistake'?'⚠ Подсказка':'🎓 Обучение';if(titleEl)titleEl.textContent=title;if(textEl)textEl.textContent=text;coach.classList.remove('show');requestAnimationFrame(()=>coach.classList.add('show'));scheduleLightCoachHide(duration);lightCoachCooldownUntil=performance.now()+Math.min(duration,6500);}
 function lightComponentExplanation(item){if(!item)return '';const texts={CPU:'CPU — центральный процессор. Он выполняет команды и расчёты программ; в игре его мощность заметно влияет на общий уровень ПК.',GPU:'GPU — видеокарта. Она отвечает за большую часть графической работы и особенно важна для игр; отдельная видеокарта обычно даёт намного больше графической производительности, чем встроенная.',RAM:'RAM — оперативная память. Она временно хранит данные, которыми программа пользуется прямо сейчас. Её объём определяет, сколько данных система может держать в работе одновременно, а поколение DDR должно совпадать с поддержкой материнской платы.',Storage:'Накопитель хранит Windows, программы и файлы даже после выключения компьютера. HDD обычно медленнее SSD, а NVMe SSD подключается через PCIe и может быть значительно быстрее.',PSU:'PSU — блок питания. Он не делает ПК быстрее сам по себе, а обеспечивает компоненты электричеством; главное требование — достаточная мощность для всей системы, особенно для видеокарты.',Motherboard:'Материнская плата соединяет все компоненты. Её сокет определяет совместимые процессоры, поддержка памяти — подходящий тип RAM, а чипсет и количество слотов влияют на будущие апгрейды.',Cooling:'Охлаждение отводит тепло от процессора. Если кулер рассчитан хуже, чем требует CPU, система получает проблему совместимости даже тогда, когда остальные детали подходят друг другу.',Case:'Корпус физически размещает комплектующие и влияет на удобство и вентиляцию. В игре он не заменяет ни питание, ни охлаждение, но хороший корпус помогает системе нормально размещаться и охлаждаться.'};return texts[item.category]||'';}
-function lightCoachAfterAction(action,item){
-  if(!isLightMode()||(!firstVisitTrainingActive&&!lightTrainingActive&&!knowledgeLightTrainingActive()))return;
-  const courseActive=knowledgeLightTrainingActive();
-  if(courseActive){
-    if(showKnowledgeLightLesson(action,item)) return;
-  }
-  const issues=checkCompatibility();
-  if(issues.length){const first=issues[0];let detail=first.detail;if(first.title.includes('CPU')&&first.title.includes('материн'))detail+=` Сокет — это физический разъём процессора: если платформы разные, такой CPU и плата вместе работать не смогут.`;else if(first.title.includes('RAM'))detail+=` У оперативной памяти тоже есть поколение, например DDR4 или DDR5. Оно должно соответствовать тому, что поддерживает материнская плата.`;else if(first.title.includes('БП'))detail+=` Блок питания должен иметь достаточную мощность для видеокарты и остальной системы; число ватт в названии БП — доступный запас питания.`;else if(first.title.includes('Охлаждение'))detail+=` Охлаждение должно успевать отводить тепло от процессора, иначе система не сможет работать в заданном режиме.`;lightCoachEvent('mistake',`Нашлась проблема: ${first.title}.`,`${detail} Это не штраф. Лайт-режим специально позволяет ошибаться без последствий, чтобы ты понял причинно-следственную связь. Исправь одну из конфликтующих деталей и снова проверь сборку.`,16000,true);}else{const power=currentPower();const actionText=action==='purchase'?`Ты добавил ${item?.name||'новую деталь'} в инвентарь. Покупка сама по себе ещё не меняет установленную сборку: после покупки деталь нужно установить.`:action==='install'?`Ты установил ${item?.name||'новую деталь'}. Теперь она участвует в расчёте мощности и проверках совместимости. ${lightComponentExplanation(item)}`:'Система проверена после твоего действия.';lightCoachEvent('praise',power>=250?'Сборка работает и уже достаточно мощная.':'Сборка работает.',`${actionText} Все основные компоненты сейчас совместимы. Текущая мощность — ${power}. Не гонись только за самым большим числом: дальше тебе нужно научиться смотреть на баланс, разумную стоимость и возможность будущего апгрейда.`,13000,true);}renderLightExamButton();}
 function renderLightExamButton(){const btn=$('examBtn');if(!btn)return;const available=isLightMode();btn.classList.toggle('hidden',!available);const compatible=available&&checkCompatibility().length===0;const unlocked=compatible&&currentPower()>=250&&!examState;btn.classList.toggle('ready',unlocked);btn.disabled=!unlocked;if(unlocked&&!btn.dataset.announced){btn.dataset.announced='1';if(firstVisitTrainingActive||lightTrainingActive)lightCoachEvent('exam','Экзамен доступен.','Мощность уже 250+ и сборка сейчас рабочая. Перед экзаменом рекомендую ещё раз посмотреть на баланс деталей: очень дорогая видеокарта рядом со слишком слабым процессором или крошечный накопитель могут испортить часть результата.',12000,true);}}
 function openExamConfirm(){if(!isLightMode()||currentPower()<250||checkCompatibility().length)return;const modal=$('examModal'),content=$('examContent'),actions=$('examStartActions'),next=$('examNextWrap');if(!modal||!content||!actions||!next)return;examState={stage:'confirm',components:EXAM_CATEGORIES.map(c=>installedItem(c)),criteria:[],total:0,passed:false};content.innerHTML=`<div class="exam-intro"><h3>Действительно начать экзамен?</h3><div class="exam-warning"><b>Внимание:</b> после подтверждения текущая сборка будет зафиксирована для проверки. Изменять детали до окончания экзамена нельзя.</div><p>Система постепенно покажет все восемь компонентов, а затем оценит пять критериев. Каждый критерий даёт от 0 до 20 баллов, максимум — 100.</p></div>`;actions.classList.remove('hidden');next.classList.add('hidden');$('examAnalysisOfferActions')?.classList.add('hidden');modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');}
 function closeExamModal(){const modal=$('examModal');if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');} $('examStartActions')?.classList.add('hidden'); $('examNextWrap')?.classList.add('hidden'); $('examAnalysisOfferActions')?.classList.add('hidden'); examState=null;}
@@ -1546,6 +1677,130 @@ function isPerfectExamBuild(items){
   const ids=EXAM_CATEGORIES.map(c=>items[c]?.id||null);
   return EXAM_PERFECT_BUILD_PROFILES.some(profile=>profile.every((id,index)=>ids[index]===id));
 }
+function examIdealRamScore(items, coreLevel) {
+  const gb = items.RAM ? ramCapacityGb(items.RAM) : 0;
+  if (!gb) return 0;
+
+  if (coreLevel >= 5) {
+    if (gb >= 32 && gb <= 128) return 4;
+    if (gb === 16 || (gb > 128 && gb <= 192)) return 3;
+    if (gb === 8 || gb >= 256) return 2;
+    return 0;
+  }
+  if (coreLevel === 4) {
+    if (gb >= 32 && gb <= 64) return 4;
+    if (gb === 16 || gb >= 128) return 3;
+    if (gb === 8) return 2;
+    return 1;
+  }
+  if (coreLevel === 3) {
+    if (gb >= 16 && gb <= 32) return 4;
+    if (gb === 64) return 3;
+    if (gb === 8 || gb >= 128) return 2;
+    return gb >= 4 ? 1 : 0;
+  }
+  if (coreLevel === 2) {
+    if (gb >= 8 && gb <= 16) return 4;
+    if (gb === 4 || gb === 32) return 3;
+    if (gb >= 64) return 2;
+    return 1;
+  }
+  if (gb === 8) return 4;
+  if (gb === 4 || gb === 16) return 3;
+  if (gb >= 32) return 2;
+  return 1;
+}
+
+function examIdealPsuFitScore(psu, gpu, coreLevel) {
+  if (!psu || !gpu || !isDiscreteGpu(gpu)) return 0;
+  const required = gpuRecommendedPsu(gpu);
+  const watts = numericWatts(psu);
+  if (!required || !watts) return 0;
+
+  const ratio = watts / required;
+  const text = `${psu.series || ''} ${psu.name || ''} ${psu.psuCertificateLabel || ''}`;
+  const goldOrBetter = /80\+\s*(?:Gold|Platinum|Titanium)/i.test(text);
+  const bronzeOrBetter = /80\+\s*(?:Bronze|Silver|Gold|Platinum|Titanium)/i.test(text);
+
+  if (coreLevel >= 4) return goldOrBetter && ratio >= 1.10 ? 1 : 0;
+  if (coreLevel === 3) return bronzeOrBetter && ratio >= 1.10 ? 1 : 0;
+  return bronzeOrBetter && ratio >= 1.05 ? 1 : 0;
+}
+
+function examIdealCoolingFitScore(cpu, cooling) {
+  if (!cpu || !cooling) return 0;
+  const tdp = cpuTdp(cpu);
+  const capacity = coolingCapacity(cooling);
+  if (!tdp || !capacity) return 0;
+  return capacity / tdp >= 1.40 ? 1 : 0;
+}
+
+function examIdealStorageFitScore(storage, coreLevel) {
+  if (!storage) return 0;
+  const type = storageType(storage);
+  const gb = storageCapacityGb(storage);
+
+  if (coreLevel >= 5) {
+    return (type === 'NVMe' && gb >= 500) || (type === 'SATA' && gb >= 1000) ? 1 : 0;
+  }
+  if (coreLevel === 4) {
+    return ((type === 'NVMe' || type === 'SATA') && gb >= 500) ? 1 : 0;
+  }
+  if (coreLevel === 3) {
+    return ((type === 'NVMe' || type === 'SATA') && gb >= 500) || (type === 'HDD' && gb >= 1000) ? 1 : 0;
+  }
+  return (type !== 'HDD' && gb >= 256) || (type === 'HDD' && gb >= 500) ? 1 : 0;
+}
+
+function examIdealCaseFitScore(caseItem, coreLevel) {
+  if (!caseItem) return 0;
+  const level = examBalanceLevel(caseItem, 'Case');
+  const required = coreLevel >= 5 ? 4 : coreLevel >= 4 ? 3 : 2;
+  return level >= required ? 1 : 0;
+}
+
+function examIdealCompatibilityScore(items) {
+  const cpu = items.CPU;
+  const gpu = items.GPU;
+  const mb = items.Motherboard;
+  if (!cpu || !gpu || !mb) return 0;
+
+  const cpuLevel = examBalanceLevel(cpu, 'CPU');
+  const gpuLevel = examBalanceLevel(gpu, 'GPU');
+  const coreLevel = Math.max(cpuLevel, gpuLevel);
+  const cpuGpuGap = Math.abs(cpuLevel - gpuLevel);
+
+  // A severe CPU/GPU mismatch is not "ideal compatibility" even when the PC still works.
+  // Treat a 3+ class gap as a complete failure of this criterion.
+  if (cpuGpuGap >= 3) return 0;
+
+  // 8 points: CPU/GPU pairing.
+  // Adjacent classes are accepted as ideal; a severe class gap reaches 0.
+  const cpuGpuScore =
+    cpuGpuGap <= 1 ? 8 :
+    cpuGpuGap === 2 ? 4 :
+    cpuGpuGap === 3 ? 1 : 0;
+
+  // 4 points: motherboard class relative to the CPU class.
+  const mbLevel = examBalanceLevel(mb, 'Motherboard');
+  const mbGap = Math.abs(cpuLevel - mbLevel);
+  const motherboardScore =
+    mbGap <= 1 ? 4 :
+    mbGap === 2 ? 2 : 0;
+
+  // 4 points: RAM capacity appropriate for the system level.
+  const ramScore = examIdealRamScore(items, coreLevel);
+
+  // 4 points: PSU, cooling, storage and case should also fit the same level.
+  const supportingScore =
+    examIdealPsuFitScore(items.PSU, gpu, coreLevel) +
+    examIdealCoolingFitScore(cpu, items.Cooling) +
+    examIdealStorageFitScore(items.Storage, coreLevel) +
+    examIdealCaseFitScore(items.Case, coreLevel);
+
+  return Math.max(0, Math.min(20, Math.round(cpuGpuScore + motherboardScore + ramScore + supportingScore)));
+}
+
 function scoreExam(){
   const sourceComponents = examState?.components || EXAM_CATEGORIES.map(c => installedItem(c));
   const items = Object.fromEntries(EXAM_CATEGORIES.map((c,i) => [c,sourceComponents[i]]));
@@ -1553,9 +1808,10 @@ function scoreExam(){
   const perf = EXAM_CATEGORIES.map(c => Number(items[c]?.performance||0));
   const maxPerf = EXAM_CATEGORIES.map(c => Math.max(...SHOP.filter(i => !i.starter && !i.legacy && i.category===c).map(i => Number(i.performance||0)),1));
   const normalized = perf.map((v,i) => Math.max(.05,Math.min(1,v/maxPerf[i])));
-  const cpuGpuGap = Math.abs(normalized[0]-normalized[1]);
-  const technicalCompatible = checkCompatibility().length===0;
-  const compatibility = technicalCompatible ? 20 : 0;
+  // Ideal Compatibility is intentionally separate from technical compatibility.
+  // The build has already passed the normal compatibility gate before the exam.
+  // This criterion measures how well the parts are matched by performance class.
+  const compatibility = examIdealCompatibilityScore(items);
 
   // Balance uses component classes instead of comparing unrelated raw performance scales.
   // A one-class CPU/GPU gap is considered a normal pairing; only larger gaps are penalized.
@@ -1605,7 +1861,7 @@ function scoreExam(){
     budget=Math.max(0,Math.min(20,efficiencyScore+costFit+powerValue));
   }
   const currentPowerSnapshot=currentPowerSnapshotSafe(items);
-  const performance=Math.max(0,Math.min(20,isPerfectBuild||currentPowerSnapshot>=340?20:Math.round(20*Math.min(1,currentPowerSnapshot/340))));
+  const performanceScore=Math.max(0,Math.min(20,isPerfectBuild||currentPowerSnapshot>=340?20:Math.round(20*Math.min(1,currentPowerSnapshot/340))));
 
   // A modern, expandable DDR5 platform can reach the full upgradeability score.
   const mb=items.Motherboard,spec=motherboardSpec(mb),platform=partPlatform(mb);
@@ -1617,8 +1873,8 @@ function scoreExam(){
   const criterionCopy={
     compatibility:{
       name: en ? 'Ideal Compatibility' : 'Идеальная совместимость',
-      positive: en ? 'The components are physically and technically compatible with each other.' : 'Компоненты физически и технически подходят друг другу.',
-      negative: en ? 'There is a physical or technical compatibility problem between the selected components.' : 'Есть физическая или техническая проблема совместимости между выбранными компонентами.'
+      positive: en ? 'The CPU, GPU, RAM, and motherboard are well matched in performance class, and the supporting components fit the overall system level.' : 'CPU, GPU, RAM и материнская плата хорошо подобраны по классу производительности, а остальные детали соответствуют общему уровню системы.',
+      negative: en ? 'The PC may work, but its key components are poorly matched by performance class. A large CPU/GPU gap, an ill-matched motherboard, or disproportionate RAM lowers this score.' : 'ПК может работать, но ключевые детали плохо подобраны по классу производительности. Большой разрыв CPU/GPU, неудачный уровень материнской платы или непропорциональный объём RAM снижают этот балл.'
     },
     balance:{
       name: en ? 'Build Balance' : 'Баланс сборки',
@@ -1645,7 +1901,7 @@ function scoreExam(){
     {id:'compatibility',name:criterionCopy.compatibility.name,score:compatibility,positive:criterionCopy.compatibility.positive,negative:criterionCopy.compatibility.negative},
     {id:'balance',name:criterionCopy.balance.name,score:balance,positive:criterionCopy.balance.positive,negative:criterionCopy.balance.negative},
     {id:'budget',name:criterionCopy.budget.name,score:budget,positive:criterionCopy.budget.positive,negative:criterionCopy.budget.negative},
-    {id:'performance',name:criterionCopy.performance.name,score:performance,positive:criterionCopy.performance.positive,negative:criterionCopy.performance.negative},
+    {id:'performance',name:criterionCopy.performance.name,score:performanceScore,positive:criterionCopy.performance.positive,negative:criterionCopy.performance.negative},
     {id:'upgrade',name:criterionCopy.upgrade.name,score:upgrade,positive:criterionCopy.upgrade.positive,negative:criterionCopy.upgrade.negative}
   ];
 }
@@ -1710,6 +1966,43 @@ function closeExamAnalysis(){
 function closeExamAnalysisModalSilently(){const modal=$('examAnalysisModal');if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');}}
 function closeExamExitModal(){const modal=$('examExitModal');if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');}}
 function hideGameForExamExit(){closeShop();closeGame();const game=$('gameScreen');if(game)game.classList.add('hidden');setMoneyVisible(false);}
+const LIGHT_EXAM_PASSED_KEY = 'pcBuilder_light_exam_passed_v1';
+function isLightExamPassed(){
+  try { if (localStorage.getItem(LIGHT_EXAM_PASSED_KEY) === '1') return true; } catch {}
+  return !!(state?.lightExamPassed || Number(state?.examBestScore) >= 60);
+}
+function markLightExamPassed(){
+  try { localStorage.setItem(LIGHT_EXAM_PASSED_KEY, '1'); } catch {}
+  if (state) { state.lightExamPassed = true; save(); }
+  if (typeof renderAdvancedAccessGates === 'function') renderAdvancedAccessGates();
+  if (typeof renderBlackMarketButton === 'function') renderBlackMarketButton();
+}
+function advancedAccessRequired(mode){ return mode === 'hardcore' || mode === 'problem'; }
+function openAdvancedAccessModal(mode='hardcore'){
+  const modal=$('advancedAccessModal');
+  if(!modal)return;
+  const text=$('advancedAccessText');
+  const target=mode==='problem'?'режим «Проблема»':'Хардкор';
+  const targetEn=mode==='problem'?'Problem mode':'Hardcore';
+  if(text) text.textContent=isEnglish()?`${targetEn} is locked until you pass the Light Mode exam.`:`${target} откроется после успешного экзамена в Лайт-режиме.`;
+  modal.classList.remove('hidden'); modal.setAttribute('aria-hidden','false');
+}
+function closeAdvancedAccessModal(){
+  const modal=$('advancedAccessModal');
+  if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');}
+}
+function renderAdvancedAccessGates(){
+  const unlocked=isLightExamPassed();
+  document.querySelectorAll('[data-gated-mode]').forEach(btn=>{
+    btn.classList.toggle('access-locked',!unlocked);
+    btn.setAttribute('aria-disabled', unlocked?'false':'true');
+    if(!unlocked) btn.title=isEnglish()?'Pass the Light Mode exam first.':'Сначала пройди экзамен в Лайт-режиме.';
+    else btn.removeAttribute('title');
+  });
+  const help=$('advancedAccessHelp');
+  if(help) help.classList.toggle('hidden',unlocked);
+  if(typeof renderBlackMarketButton==='function') renderBlackMarketButton();
+}
 function completeExamTrainingFlags(){
   if(firstVisitTrainingActive){
     localStorage.setItem(FIRST_VISIT_DONE_KEY,'1');
@@ -1718,12 +2011,21 @@ function completeExamTrainingFlags(){
   firstVisitTrainingActive=false;
   lightTrainingActive=false;
   if(state?.mode==='light') state.lightTrainingEnabled=false;
+  if(state?.knowledgeLightTraining){
+    state.knowledgeLightTraining.active=false;
+    state.knowledgeLightTraining.completed=true;
+  }
+  if(typeof clearGuidedLightTarget==='function') clearGuidedLightTarget();
+  lightGuideBusy=false;
+  lightCompleteCheckPending=false;
 }
 function openExamExitOffer(){
   const modal=$('examExitModal'),text=$('examExitText');
   if(!modal)return;
   hideGameForExamExit();
-  if(text)text.textContent=`Экзамен завершён: ${Number(examState?.total)||0}/100. Игра сейчас закрыта. Хочешь сохранить это прохождение?`;
+  const score=Number(examState?.total)||0;
+  const passed=!!examState?.passed;
+  if(text)text.textContent=isEnglish()?`Exam finished: ${score}/100. The game is now closed.${passed?' Access to Hardcore and Problem Mode has already been saved.':''} Would you like to save this playthrough?`:`Экзамен завершён: ${score}/100. Игра сейчас закрыта.${passed?' Доступ к Хардкору и «Проблеме» уже сохранён.':''} Хочешь сохранить это прохождение?`;
   closeExamModalSilently();
   closeExamAnalysisModalSilently();
   modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');
@@ -1771,9 +2073,10 @@ function finishExamScoring(){
   if(!examState)return;
   examState.passed=examState.total>=60;
   if(state){ state.examBestScore=Math.max(Number(state.examBestScore)||0, Number(examState.total)||0); }
+  if(examState.passed) markLightExamPassed();
   if(typeof checkAchievements==='function') checkAchievements({ examScore:Number(examState.total)||0, examCompleted:true });
   const final=$('examFinal');
-  if(final){final.classList.remove('hidden');final.innerHTML=`<div class="score-number">${examState.total}/100</div><div class="score-label">${examState.passed?'Экзамен пройден.':'Экзамен не пройден.'}</div>`;}
+  if(final){final.classList.remove('hidden');final.innerHTML=`<div class="score-number">${examState.total}/100</div><div class="score-label">${examState.passed?'Экзамен пройден.':'Экзамен не пройден.'}</div>${examState.passed?'<div class="exam-access-saved">🔓 Доступ сохранён: Хардкор и «Проблема» останутся открыты после выхода из Лайта.</div>':''}`;}
   const next=$('examNextWrap');
   const btn=$('examNextBtn');
   if(btn)btn.textContent=examState.total<60?'Разобрать ошибки':examState.total<90?'Далее':'Завершить';
@@ -1823,7 +2126,9 @@ const KNOWLEDGE_LIGHT_GUIDED_COURSES = {
       { action: 'select-category', value: 'CPU', selector: '.catalog-tab[data-cat="CPU"]', title: {ru:'Задание: найди CPU',en:'Task: find the CPU'}, text: {ru:'Нажми CPU. CPU — это процессор. Он выполняет команды и подготавливает задачи для остальных частей компьютера.',en:'Click CPU. CPU is the processor. It follows instructions and prepares tasks for the rest of the computer.'}, resultTitle: {ru:'Процессор найден',en:'Processor found'}, resultText: {ru:'Просто запомни основу: CPU думает и говорит компьютеру, что делать. На следующих шагах увидим, зачем ему нужен GPU.',en:'Remember the basic idea: the CPU thinks and tells the computer what to do. Next we will see why it needs a GPU.'} },
       { action: 'purchase', itemId: 'cpu-pentium-g6400', selector: '[data-buy="cpu-pentium-g6400"]', title: {ru:'Задание: купи CPU',en:'Task: buy a CPU'}, text: {ru:'Купи Intel Pentium Gold G6400. Не гонимся за дорогим названием — сейчас нам важен сам процесс.',en:'Buy the Intel Pentium Gold G6400. We are not chasing an expensive name here — the process is what matters.'}, resultTitle: {ru:'Процессор в инвентаре',en:'Processor is in the inventory'}, resultText: {ru:'Покупка ещё не меняет установленный ПК. Деталь сначала попадает в инвентарь, а потом устанавливается.',en:'Buying a component does not change the installed PC yet. It first goes into the inventory and is then installed.'} },
       { action: 'install', itemId: 'cpu-pentium-g6400', selector: '[data-install="cpu-pentium-g6400"]', title: {ru:'Задание: установи CPU',en:'Task: install the CPU'}, text: {ru:'Нажми «Установить». После этого процессор станет частью твоей сборки.',en:'Click “Install”. The processor will then become part of your build.'}, resultTitle: {ru:'CPU установлен',en:'CPU installed'}, resultText: {ru:'Теперь процессор действительно работает в составе ПК. Запомни разницу: купить — получить деталь, установить — сделать её частью сборки.',en:'Now the processor is actually part of the PC. Remember the difference: buy means obtaining a part; install means making it part of the build.'} },
-      { action: 'replacement', value: 'GPU', selector: '[data-part-category="GPU"]', title: {ru:'Задание: познакомься с GPU',en:'Task: meet the GPU'}, text: {ru:'Нажми на GPU в «Мой ПК». GPU — это видеокарта. CPU может заниматься графикой, но GPU специально сделан для того, чтобы быстро рисовать кадры.',en:'Click the GPU in “My PC”. GPU is the graphics card. A CPU can handle graphics too, but the GPU is specifically built to render frames quickly.'}, resultTitle: {ru:'CPU и GPU работают вместе',en:'CPU and GPU work together'}, resultText: {ru:'Представь поле с летающими шариками. CPU решает, куда они должны лететь, а GPU быстро рисует их движение. Без хорошего GPU картинка может дёргаться, а без CPU некому подготовить команды для сцены.',en:'Imagine a field with flying balls. The CPU decides where they should go, while the GPU quickly draws their movement. Without a good GPU the picture can stutter, and without a CPU there is no one to prepare the scene commands.'} }
+      { action: 'replacement', value: 'GPU', selector: '[data-part-category="GPU"]', title: {ru:'Задание: познакомься с GPU',en:'Task: meet the GPU'}, text: {ru:'Нажми на GPU в «Мой ПК». GPU — это видеокарта. CPU может заниматься графикой, но GPU специально сделан для того, чтобы быстро рисовать кадры.',en:'Click the GPU in “My PC”. GPU is the graphics card. A CPU can handle graphics too, but the GPU is specifically built to render frames quickly.'}, resultTitle: {ru:'CPU и GPU работают вместе',en:'CPU and GPU work together'}, resultText: {ru:'Представь поле с летающими шариками. CPU решает, куда они должны лететь, а GPU быстро рисует их движение. Без хорошего GPU картинка может дёргаться, а без CPU некому подготовить команды для сцены.',en:'Imagine a field with flying balls. The CPU decides where they should go, while the GPU quickly draws their movement. Without a good GPU the picture can stutter, and without a CPU there is no one to prepare the scene commands.'} },
+      { action: 'reach-power', minPower: 250, selector: '#power', title: {ru:'Задание: собери рабочий ПК',en:'Task: build a working PC'}, text: {ru:'Теперь начинается твоя первая настоящая сборка. Улучшай детали как считаешь нужным и доведи мощность ПК минимум до 250. Не обязательно повторять чью-то конфигурацию — важно самому выбирать подходящие детали и смотреть на результат.',en:'Now your first real build begins. Upgrade the components however you think is appropriate and bring PC power to at least 250. You do not need to copy a fixed configuration — the goal is to choose suitable parts yourself and watch the result.'}, resultTitle: {ru:'Требование по мощности выполнено',en:'The power requirement is met'}, resultText: {ru:'250+ мощности есть. Но одной цифры недостаточно: перед экзаменом нужно убедиться, что все основные компоненты совместимы.',en:'You reached 250+ PC power. But the number alone is not enough: before the exam, make sure the main components are compatible.'} },
+      { action: 'complete-check', selector: '#lightCompleteCheckBtn', title: {ru:'Задание: выполни полную проверку',en:'Task: run the complete check'}, text: {ru:'Нажми «Полная проверка». Сайт проверит всю сборку целиком. Если найдётся ошибка, исправь её и снова запусти проверку.',en:'Click “Complete Check”. The site will check the whole build. If it finds an issue, fix it and run the check again.'}, resultTitle: {ru:'Рабочий ПК подтверждён',en:'Working PC confirmed'}, resultText: {ru:'Мощность 250+ достигнута, а проверка совместимости пройдена. Кнопка экзамена теперь доступна — следующий шаг уже зависит от твоих знаний.',en:'The build has 250+ power and passed the compatibility check. The exam button is now available — the next step depends on your knowledge.'} }
     ]
   },
   2: {
@@ -1837,6 +2142,9 @@ const KNOWLEDGE_LIGHT_GUIDED_COURSES = {
       { action: 'purchase', itemId: 'gpu-gtx-1050', selector: '[data-buy="gpu-gtx-1050"]', title: {ru:'Задание: купи GTX 1050',en:'Task: buy the GTX 1050'}, text: {ru:'Купи GTX 1050 и посмотри, как игра показывает покупку отдельно от установки.',en:'Buy the GTX 1050 and notice how the game separates buying from installing.'}, resultTitle: {ru:'Карта куплена',en:'Graphics card purchased'}, resultText: {ru:'Она лежит в инвентаре. Пока ты её не установишь, текущий ПК не изменится.',en:'It is in your inventory. The current PC does not change until you install it.'} },
       { action: 'install', itemId: 'gpu-gtx-1050', selector: '[data-install="gpu-gtx-1050"]', title: {ru:'Задание: установи GTX 1050',en:'Task: install the GTX 1050'}, text: {ru:'Установи карту и посмотри на новую мощность ПК.',en:'Install the card and look at the new PC power.'}, resultTitle: {ru:'Мощность изменилась',en:'Power changed'}, resultText: {ru:'Вот зачем мы смотрим на результат после каждого действия: одна деталь реально меняет поведение всей сборки.',en:'This is why we look at the result after every action: one component can really change the behavior of the whole build.'} },
       { action: 'replacement', value: 'CPU', selector: '[data-part-category="CPU"]', title: {ru:'Задание: проверь CPU',en:'Task: check the CPU'}, text: {ru:'Нажми на CPU в «Мой ПК». CPU готовит задачи, GPU рисует кадры. Они нужны друг другу.',en:'Click the CPU in “My PC”. The CPU prepares tasks and the GPU renders frames. They depend on each other.'}, resultTitle: {ru:'Понимаем баланс',en:'Understanding balance'}, resultText: {ru:'Если CPU слабый, он не успевает давать GPU новые задачи. Если слабый GPU — он не успевает быстро рисовать то, что подготовил CPU.',en:'If the CPU is weak, it cannot keep feeding new tasks to the GPU. If the GPU is weak, it cannot quickly render what the CPU prepared.'} }
+      ,{ action: 'reach-power', minPower: 250, selector: '#power', title: {ru:'Задание: доведи сборку до требования экзамена',en:'Task: reach the exam power requirement'}, text: {ru:'Теперь самостоятельно улучшай сборку и доведи мощность минимум до 250. Выбирай реальные комплектующие из каталога, сравнивай их и не забывай проверять совместимость.',en:'Now improve the build yourself and bring PC power to at least 250. Choose real components from the catalog, compare them, and keep checking compatibility.'}, resultTitle: {ru:'250+ мощности достигнуто',en:'250+ power reached'}, resultText: {ru:'Требование по мощности выполнено. Осталась финальная полная проверка.',en:'The power requirement is met. One final complete check remains.'} },
+      { action: 'complete-check', selector: '#lightCompleteCheckBtn', title: {ru:'Задание: выполни полную проверку',en:'Task: run the complete check'}, text: {ru:'Нажми «Полная проверка». Если сайт найдёт конфликт, исправь сборку и повтори проверку.',en:'Click “Complete Check”. If the site finds a conflict, fix the build and run the check again.'}, resultTitle: {ru:'Рабочая сборка готова к экзамену',en:'The working build is ready for the exam'}, resultText: {ru:'Мощность 250+ и совместимость в порядке. Теперь можно переходить к экзамену.',en:'The build has 250+ power and passes the compatibility check. You can now move on to the exam.'} }
+
     ]
   },
   3: {
@@ -1851,6 +2159,9 @@ const KNOWLEDGE_LIGHT_GUIDED_COURSES = {
       { action: 'select-category', value: 'RAM', selector: '.catalog-tab[data-cat="RAM"]', title: {ru:'Задание: выбери правильную RAM',en:'Task: choose the correct RAM'}, text: {ru:'Вернись к RAM и выбери правильное поколение — DDR4.',en:'Return to RAM and choose the correct generation — DDR4.'}, resultTitle: {ru:'Правильный тип найден',en:'Correct type found'}, resultText: {ru:'Совместимость начинается с простой проверки: подходит ли тип детали конкретной платформе.',en:'Compatibility starts with a simple check: does this component type fit this platform?'} },
       { action: 'purchase', itemId: 'ram-ddr4-8', selector: '[data-buy="ram-ddr4-8"]', title: {ru:'Задание: купи DDR4',en:'Task: buy DDR4'}, text: {ru:'Купи 8 GB DDR4. Теперь берём уже подходящий вариант.',en:'Buy 8 GB DDR4. Now we are choosing a compatible option.'}, resultTitle: {ru:'Правильная память куплена',en:'Correct memory purchased'}, resultText: {ru:'Осталось заменить неправильную деталь правильной.',en:'Now we only need to replace the wrong component with the correct one.'} },
       { action: 'install', itemId: 'ram-ddr4-8', selector: '[data-install="ram-ddr4-8"]', title: {ru:'Задание: исправь сборку',en:'Task: fix the build'}, text: {ru:'Установи DDR4 и посмотри, как изменится результат проверки.',en:'Install the DDR4 and see how the compatibility result changes.'}, resultTitle: {ru:'Сборка исправлена',en:'Build fixed'}, resultText: {ru:'Готово. Ты не просто услышал правило про DDR4 — ты сам увидел ошибку, её причину и исправление.',en:'Done. You did not just hear a DDR4 rule — you saw the mistake, its cause, and the fix yourself.'} }
+      ,{ action: 'reach-power', minPower: 250, selector: '#power', title: {ru:'Задание: собери итоговую конфигурацию',en:'Task: finish the build'}, text: {ru:'Теперь сам доведи рабочую конфигурацию минимум до 250 мощности. Следи не только за числом, но и за тем, чтобы выбранные компоненты оставались совместимыми.',en:'Now bring the working configuration to at least 250 power yourself. Watch the number, but also make sure the selected components remain compatible.'}, resultTitle: {ru:'Требование экзамена выполнено',en:'Exam requirement reached'}, resultText: {ru:'250+ мощности достигнуто. Осталась финальная проверка всей системы.',en:'You reached 250+ power. Only the final system check remains.'} },
+      { action: 'complete-check', selector: '#lightCompleteCheckBtn', title: {ru:'Задание: сделай полную проверку',en:'Task: perform the complete check'}, text: {ru:'Нажми «Полная проверка». Это последний практический шаг курса перед экзаменом.',en:'Click “Complete Check”. This is the final practical step before the exam.'}, resultTitle: {ru:'Практическая часть завершена',en:'Practical training complete'}, resultText: {ru:'Сборка достигла 250+ мощности и прошла полную проверку. Теперь ты готов проверить себя на экзамене.',en:'The build reached 250+ power and passed the complete check. You are now ready to test yourself with the exam.'} }
+
     ]
   }
 };
@@ -1858,6 +2169,7 @@ const KNOWLEDGE_LIGHT_GUIDED_COURSES = {
 let lightGuideStep = 0;
 let lightGuideTransitionTimer = null;
 let lightGuideBusy = false;
+let lightCompleteCheckPending = false;
 
 function guidedLightCourse(level = Number(state?.knowledgeLightTraining?.level)) {
   return KNOWLEDGE_LIGHT_GUIDED_COURSES[Number(level)] || null;
@@ -1884,6 +2196,10 @@ function clearGuidedLightTarget() {
 function positionGuidedLightTarget() {
   if (!guidedLightActive()) return;
   const task = guidedLightCurrentTask();
+  if (task?.action === 'reach-power') {
+    clearGuidedLightTarget();
+    return;
+  }
   const target = guidedLightTarget(task);
   const spotlight = $('lightGuideSpotlight');
   if (!target || !spotlight) return;
@@ -1944,13 +2260,16 @@ function showGuidedLightTask(animate = true) {
   const task = guidedLightCurrentTask();
   const course = guidedLightCourse(state.knowledgeLightTraining.level);
   if (!task || !course) return;
+  const freeBuildTask = task.action === 'reach-power';
   const target = guidedLightTarget(task);
-  guidedLightCloseOverlaysForTarget(target);
+  // The 250+ power step is deliberately an unrestricted build phase.
+  // Do not spotlight the power number, darken the page, or close the catalog/shop here.
+  if (!freeBuildTask) guidedLightCloseOverlaysForTarget(target);
   setLightCoachText(isEnglish() ? '🎯 Task' : '🎯 Задание', guidedLightLocalize(task.title), guidedLightLocalize(task.text));
   const progress = $('lightTrainingProgress');
   if (progress) progress.textContent = `${isEnglish() ? 'Task' : 'Задание'} ${Number(state.knowledgeLightTraining.lesson) + 1} / ${course.tasks.length} · ${guidedLightLocalize(task.title)}`;
-  if (target) { try { target.scrollIntoView({behavior:'smooth', block:'center', inline:'nearest'}); } catch {} }
-  setTimeout(positionGuidedLightTarget, 80);
+  if (target && !freeBuildTask) { try { target.scrollIntoView({behavior:'smooth', block:'center', inline:'nearest'}); } catch {} }
+  if (!freeBuildTask) setTimeout(positionGuidedLightTarget, 80);
   if (animate) {
     const coach = $('lightCoach');
     if (coach) { coach.classList.remove('guided-in'); void coach.offsetWidth; coach.classList.add('guided-in'); }
@@ -1963,8 +2282,67 @@ function showGuidedLightResult(task) {
   const progress = $('lightTrainingProgress');
   if (progress) progress.textContent = `${isEnglish() ? 'Completed' : 'Выполнено'} ${Number(state.knowledgeLightTraining.lesson)} / ${course?.tasks?.length || 0}`;
 }
+function guidedLightGoalProgress(task){
+  if(!task || task.action!=='reach-power') return;
+  const current=Math.round(currentPower());
+  const need=Number(task.minPower)||250;
+  const remaining=Math.max(0,need-current);
+  setLightCoachText(isEnglish()?'🎯 Build goal':'🎯 Цель сборки', guidedLightLocalize(task.title), isEnglish()?`Current power: ${current}. Reach ${need}+ PC power by choosing and installing upgrades. ${remaining?`${remaining} more power needed.`:'The requirement is met.'}`:`Сейчас мощности: ${current}. Доведи её до ${need}+, выбирая и устанавливая подходящие улучшения. ${remaining?`Осталось: ${remaining}.`:'Требование уже выполнено.'}`);
+  const progress=$('lightTrainingProgress');
+  if(progress) progress.textContent=`${isEnglish()?'Build goal':'Цель'}: ${current} / ${need}+`;
+  positionGuidedLightTarget();
+}
+function runLightCompleteCheck(){
+  if(!isLightMode()) return;
+  clearTimeout(lightGuideTransitionTimer);
+  lightGuideTransitionTimer=null;
+  const power=Math.round(currentPower());
+  lightCompleteCheckPending=false;
+  // Never leave the training spotlight above the diagnostic modal.
+  // The spotlight used to keep the guide's click guard active over the modal close button,
+  // which could make the whole Light course appear frozen after pressing Complete Check.
+  clearGuidedLightTarget();
+  try {
+    const issues=checkCompatibility();
+    if(power>=250 && issues.length===0 && guidedLightActive() && guidedLightCurrentTask()?.action==='complete-check') lightCompleteCheckPending=true;
+    openDiagnostic(issues);
+    renderLightExamButton();
+    if(power<250 && guidedLightActive()){
+      setLightCoachText(isEnglish()?'🎯 Build goal':'🎯 Цель сборки', isEnglish()?'Build a working PC':'Собери рабочий ПК', isEnglish()?`The complete check is available, but the exam also requires at least 250 PC power. Current power: ${power}.`:`Полная проверка доступна, но для экзамена нужна мощность минимум 250. Сейчас: ${power}.`);
+    }
+  } catch(error) {
+    console.error('[Light Training] Complete Check failed:', error);
+    lightCompleteCheckPending=false;
+    if(guidedLightActive() && guidedLightCurrentTask()?.action==='complete-check') {
+      setLightCoachText(isEnglish()?'⚠️ Check failed to open':'⚠️ Проверка не открылась', isEnglish()?'The build check could not open correctly. Your training is not lost; try the Complete Check button again.':'Проверку не удалось открыть. Прохождение не потеряно — попробуй нажать «Полная проверка» ещё раз.');
+      setTimeout(()=>showGuidedLightTask(true),120);
+    }
+  }
+}
+function onLightDiagnosticClosed(){
+  if(!guidedLightActive()) return;
+  const diagnostic=$('diagnosticModal');
+  if(diagnostic && !diagnostic.classList.contains('hidden')) closeDiagnostic();
+  const task=guidedLightCurrentTask();
+  if(task?.action!=='complete-check') return;
+  if(lightCompleteCheckPending){
+    lightCompleteCheckPending=false;
+    // A successful Complete Check is a terminal action for this task.
+    // Advance the guided course directly instead of routing the button through the
+    // generic lesson handler, which could leave the same task active underneath.
+    lightGuideBusy=true;
+    showGuidedLightResult(task);
+    advanceGuidedLightCourse(task);
+    renderLightModeUI();
+    return;
+  }
+  // Failed checks must return to the same task so the player can fix the build and retry.
+  showGuidedLightTask(true);
+}
+
 function guidedLightMatches(task, action, item, payload) {
   if (!task) return false;
+  if (task.action === 'complete-check') return action === 'complete-check' && currentPower() >= Number(task.minPower || 250) && checkCompatibility().length === 0;
   if (task.action !== action) return false;
   if (task.value !== undefined) {
     const value = payload ?? item?.category;
@@ -1994,6 +2372,18 @@ function showKnowledgeLightLesson(action, item = null, payload = null) {
   }
   const normalizedAction = action === 'catalog' ? 'open-catalog' : action;
   const task = guidedLightCurrentTask();
+  if(task?.action==='reach-power'){
+    if(currentPower() >= Number(task.minPower||250)){
+      if(lightGuideBusy) return true;
+      lightGuideBusy=true;
+      showGuidedLightResult(task);
+      advanceGuidedLightCourse(task);
+      renderLightModeUI();
+      return true;
+    }
+    guidedLightGoalProgress(task);
+    return true;
+  }
   if (!guidedLightMatches(task, normalizedAction, item, payload)) {
     showKnowledgeLightWrongAction();
     return true;
@@ -2015,7 +2405,7 @@ function completeGuidedLightCourse() {
   clearGuidedLightTarget();
   save();
   render();
-  setLightCoachText(isEnglish() ? '🎓 Course complete' : '🎓 Курс завершён', isEnglish() ? 'You built it yourself' : 'Ты сделал всё сам', isEnglish() ? 'The guided course is complete. You can keep experimenting in Light Mode, and normal contextual hints are still available.' : 'Пошаговый курс завершён. Теперь можно самому экспериментировать в Лайт-режиме, а обычные контекстные подсказки останутся доступны.');
+  setLightCoachText(isEnglish() ? '🎓 Course complete' : '🎓 Курс завершён', isEnglish() ? 'Your working PC is ready' : 'Твой рабочий ПК готов', isEnglish() ? 'You reached the exam power requirement and passed the complete compatibility check. The Exam button is now available. After a successful exam, access to Hardcore and Problem Mode will be saved.' : 'Ты достиг требования по мощности для экзамена и прошёл полную проверку совместимости. Кнопка экзамена теперь доступна. После успешной сдачи доступ к Хардкору и «Проблеме» сохранится.');
 }
 function showKnowledgeLightWrongAction() {
   if (!guidedLightActive() || lightGuideBusy) return;
@@ -2026,9 +2416,13 @@ function showKnowledgeLightWrongAction() {
 }
 function lightGuideClickGuard(event) {
   if (!guidedLightActive() || lightGuideBusy) return;
+  const raw = event.target;
+  const diagnostic = $('diagnosticModal');
+  if (diagnostic && !diagnostic.classList.contains('hidden') && raw instanceof Element && raw.closest('#diagnosticModal')) return;
   const target = guidedLightTarget();
   if (!target) return;
-  const raw = event.target;
+  const task = guidedLightCurrentTask();
+  if(task?.action==='reach-power') return;
   if (raw instanceof Element && (target === raw || target.contains(raw))) {
     const task = guidedLightCurrentTask();
     if (task?.action === 'inspect') {
@@ -2073,6 +2467,7 @@ function startKnowledgeLightCourse(level){
   firstVisitTrainingActive=false;
   lightGuideStep=0;
   lightGuideBusy=false;
+  lightCompleteCheckPending=false;
   save();
   render();
   setTimeout(()=>showKnowledgeLightLesson('enter'),320);

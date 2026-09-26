@@ -2071,3 +2071,308 @@ body.theme-light .light-guide-spotlight, html.theme-light .light-guide-spotlight
 .training-inspect-target:hover { background: rgba(121,201,255,.06); }
 .light-guide-target.training-inspect-target { box-shadow: 0 0 0 2px rgba(121,201,255,.18); }
 body.theme-light .training-inspect-target:hover, html.theme-light .training-inspect-target:hover { background: rgba(35,121,174,.07); }
+
+
+/* v2.0.7 — structured Update Log */
+.update-log-window { width:min(980px,100%); }
+.update-log-content { display:grid; gap:10px; margin:0; padding-top:14px; color:#cdd4db; }
+.update-log-entry { padding:14px 15px; border:1px solid #303943; border-radius:11px; background:#11161a; }
+.update-log-entry h3 { margin:0 0 10px; color:#f0f3f5; font:800 15px/1.35 Arial,sans-serif; }
+.update-log-entry ul { margin:0; padding-left:20px; display:grid; gap:7px; }
+.update-log-entry li { color:#aeb8c2; font:13px/1.55 Arial,sans-serif; }
+body.theme-light .update-log-entry { background:var(--panel-2); border-color:var(--border); }
+body.theme-light .update-log-entry h3 { color:var(--text); }
+body.theme-light .update-log-entry li { color:var(--soft); }
+@media (max-width:760px) {
+  .update-log-entry { padding:12px; }
+  .update-log-entry h3 { font-size:14px; }
+  .update-log-entry li { font-size:12.5px; }
+}
+
+/* ===== v2.0.8 — Problem Mode ===== */
+.problem-mode-card {
+  grid-column: 1 / -1;
+  min-height: 116px;
+  border-color: #6b5140;
+  background: linear-gradient(135deg, #211a16 0%, #30221c 55%, #1b1715 100%);
+}
+.problem-mode-card:hover { border-color: #a47b5e; background: linear-gradient(135deg, #2a201b 0%, #39281f 55%, #211a17 100%); }
+.problem-difficulty-window { width: min(720px, 100%); }
+.problem-modal-subtitle { margin: -6px 0 0; color: #8f99a3; font-size: 13px; }
+.problem-difficulty-options { display: grid; gap: 9px; margin-top: 14px; }
+.problem-difficulty-card {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #343d46;
+  border-radius: 11px;
+  background: #11161a;
+  color: #e8edf2;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease;
+}
+.problem-difficulty-card:hover { transform: translateY(-2px); border-color: #6a7784; background: #1a2229; box-shadow: 0 9px 24px rgba(0,0,0,.22); }
+.problem-difficulty-number { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 10px; background: #202830; font-size: 19px; font-weight: 900; }
+.problem-difficulty-copy { display: grid; gap: 3px; min-width: 0; }
+.problem-difficulty-copy strong { font-size: 15px; }
+.problem-difficulty-copy small { color: #7f8993; font-size: 12px; line-height: 1.4; }
+.problem-difficulty-arrow { font-size: 22px; color: #7f8993; }
+
+.problem-screen { position: relative; min-height: calc(100vh - 108px); padding-bottom: 110px; overflow: hidden; }
+.problem-screen-enter { animation: problemScreenEnter .3s ease both; }
+@keyframes problemScreenEnter { from { opacity: 0; transform: translateY(12px) scale(.995); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.problem-screen-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+.problem-screen-header h2 { margin-bottom: 5px; }
+.problem-screen-header p { margin: 0; max-width: 850px; color: #9ba5ae; line-height: 1.5; }
+.problem-no-issue-hint { margin-top: 6px !important; color: #c8d0d8 !important; }
+.problem-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.problem-board-shell { min-height: 500px; display: grid; place-items: center; padding: 20px 12px 80px; }
+.problem-parts-grid { width: min(980px, 100%); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.problem-part-card {
+  position: relative;
+  min-height: 135px;
+  padding: 15px;
+  display: grid;
+  align-content: center;
+  gap: 6px;
+  border: 1px solid #303943;
+  border-radius: 13px;
+  background: #171c21;
+  color: #e8edf2;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease;
+}
+.problem-part-card:hover { transform: translateY(-3px); border-color: #697580; background: #1d252c; }
+.problem-part-card:disabled { cursor: default; }
+.problem-part-card.selected { border-color: #4ed47c; background: linear-gradient(145deg, rgba(41,122,67,.42), rgba(19,46,28,.9)); box-shadow: 0 0 0 1px rgba(78,212,124,.18), 0 0 26px rgba(78,212,124,.16); }
+.problem-part-category { color: #8f99a3; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+.problem-part-card strong { font-size: 17px; line-height: 1.25; }
+.problem-part-hint { color: #707984; font-size: 12px; line-height: 1.35; }
+.problem-result-card.partial { border-color:#b89135; }
+.problem-result-card.partial .problem-result-icon { background:#8a6c20; color:#fff2b5; box-shadow:0 0 20px rgba(184,145,53,.24); }
+
+.problem-selected-mark { position: absolute; top: 10px; right: 11px; width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; background: #3ec66d; color: #07120b; font-weight: 900; box-shadow: 0 0 14px rgba(62,198,109,.45); }
+.problem-confirm-btn { position: absolute; right: 18px; bottom: 18px; z-index: 12; width: auto; min-width: 170px; padding: 14px 22px; box-shadow: 0 14px 35px rgba(0,0,0,.3); }
+.problem-detail-backdrop { position: absolute; inset: 0; z-index: 18; background: rgba(0,0,0,.38); opacity: 0; pointer-events: none; transition: opacity .22s ease; }
+.problem-detail-drawer { position: absolute; left: 50%; bottom: 0; z-index: 20; width: min(780px, calc(100% - 24px)); max-height: min(410px, 65vh); overflow: auto; padding: 17px; border: 1px solid #3d4852; border-bottom: 0; border-radius: 15px 15px 0 0; background: #171c21; box-shadow: 0 -18px 55px rgba(0,0,0,.48); transform: translate(-50%, 105%); transition: transform .25s cubic-bezier(.2,.75,.2,1); }
+.problem-detail-drawer.open { transform: translate(-50%, 0); }
+.problem-detail-drawer.open + * { }
+.problem-screen.problem-detail-open .problem-detail-backdrop { opacity: 1; pointer-events: auto; }
+.problem-detail-backdrop { }
+.problem-detail-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.problem-detail-category { color: #8f99a3; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+.problem-detail-head h3 { margin: 4px 0 0; font-size: 21px; }
+.problem-detail-close { flex: 0 0 auto; }
+.problem-spec-list { display: grid; gap: 7px; }
+.problem-spec-row { display: grid; grid-template-columns: minmax(150px, .7fr) minmax(0, 1.3fr); gap: 12px; padding: 9px 10px; border-radius: 8px; background: #11161a; }
+.problem-spec-row span { color: #8f99a3; }
+.problem-spec-row strong { overflow-wrap: anywhere; }
+.problem-select-btn { margin-top: 12px; }
+.problem-select-btn.is-selected { background: #2f9e63; color: #07130b; }
+.problem-result { position: absolute; inset: 0; z-index: 30; display: grid; place-items: center; padding: 20px; background: rgba(7,10,12,.78); backdrop-filter: blur(4px); }
+.problem-result-card { width: min(620px, 100%); padding: 26px; text-align: center; border: 1px solid #39444e; border-radius: 16px; background: #171c21; box-shadow: 0 22px 70px rgba(0,0,0,.55); animation: problemResultIn .25s ease both; }
+@keyframes problemResultIn { from { opacity: 0; transform: scale(.96) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.problem-result-card.success { border-color: #3d8d5b; }
+.problem-result-card.fail { border-color: #8b4b4e; }
+.problem-result-icon { width: 52px; height: 52px; margin: 0 auto 10px; display: grid; place-items: center; border-radius: 50%; font-size: 29px; font-weight: 900; background: #20272e; }
+.problem-result-card.success .problem-result-icon { background: #2e6d46; color: #bff1cc; }
+.problem-result-card.fail .problem-result-icon { background: #6f383c; color: #ffd1d1; }
+.problem-result-card.partial { border-color:#b89135; }
+.problem-result-card h3 { margin-bottom: 8px; font-size: 25px; }
+.problem-result-card p { margin: 0; color: #aeb8c2; line-height: 1.55; }
+.problem-result-actions { margin-top: 18px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+
+body.theme-light .problem-mode-card { background: linear-gradient(135deg, #f6eee9, #fff); color: #182028; border-color: #c8b5a8; }
+body.theme-light .problem-mode-card:hover { background: #fff; border-color: #9b806d; }
+body.theme-light .problem-difficulty-card,
+body.theme-light .problem-part-card,
+body.theme-light .problem-detail-drawer,
+body.theme-light .problem-result-card { background: #fff; color: #182028; border-color: #cfd7de; }
+body.theme-light .problem-difficulty-card:hover,
+body.theme-light .problem-part-card:hover { background: #f3f6f8; border-color: #aeb9c3; }
+body.theme-light .problem-difficulty-number,
+body.theme-light .problem-spec-row { background: #f2f5f7; }
+body.theme-light .problem-detail-drawer { box-shadow: 0 -18px 55px rgba(0,0,0,.18); }
+body.theme-light .problem-part-category,
+body.theme-light .problem-difficulty-copy small,
+body.theme-light .problem-difficulty-arrow,
+body.theme-light .problem-part-hint,
+body.theme-light .problem-detail-category,
+body.theme-light .problem-spec-row span { color: #697681; }
+body.theme-light .problem-screen-header p { color: #65717a; }
+body.theme-light .problem-no-issue-hint { color: #27343d !important; }
+
+@media (max-width: 800px) {
+  .problem-parts-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .problem-board-shell { min-height: 440px; }
+}
+@media (max-width: 560px) {
+  .problem-screen { min-height: calc(100vh - 128px); }
+  .problem-screen-header { flex-direction: column; }
+  .problem-screen-header > .small { align-self: flex-start; }
+  .problem-parts-grid { grid-template-columns: 1fr; }
+  .problem-board-shell { padding: 10px 0 95px; }
+  .problem-part-card { min-height: 108px; }
+  .problem-confirm-btn { right: 10px; bottom: 10px; width: calc(100% - 20px); }
+  .problem-detail-drawer { width: calc(100% - 10px); max-height: 72vh; }
+  .problem-difficulty-card { grid-template-columns: 42px 1fr auto; }
+  .problem-difficulty-number { width: 36px; height: 36px; }
+  .problem-spec-row { grid-template-columns: 1fr; gap: 3px; }
+}
+
+
+/* v2.0.12 — Problem Mode hides direct certificate giveaway on component cards */
+
+
+/* v2.0.13 — Problem Mode mobile/fixed drawer cleanup */
+.problem-detail-backdrop { position: fixed; inset: 0; }
+.problem-detail-drawer { position: fixed; left: 50%; bottom: 0; max-height: min(410px, 65vh); }
+.problem-result { position: fixed; inset: 0; }
+@media (max-width: 760px) {
+  .problem-detail-drawer { width: calc(100vw - 14px); max-height: min(72dvh, 620px); padding: 14px; }
+  .problem-spec-row { grid-template-columns: minmax(105px, .8fr) minmax(0, 1.2fr); }
+}
+
+
+/* ===== v2.0.15 — exam gates / simple lock icons ===== */
+.advanced-access-help{margin:10px 0 0;text-align:center;color:#9aa6b0;font-size:12px}
+.advanced-access-help.hidden{display:none!important}
+.gated-mode-card.access-locked{filter:saturate(.58) brightness(.78)}
+.gated-mode-card.access-locked:hover{filter:saturate(.72) brightness(.86)}
+.gated-mode-card.access-locked::after{opacity:.18}
+
+/* Locked mode cards: one clean lock, no chains. */
+.mode-lock-icon{
+  position:absolute!important;
+  inset:0!important;
+  z-index:5!important;
+  display:none!important;
+  pointer-events:none!important;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.08);
+}
+.gated-mode-card.access-locked .mode-lock-icon{display:flex!important}
+.mode-lock-icon b,
+.advanced-access-lock-art .simple-lock,
+.black-market-lock-icon .simple-lock{
+  position:relative;
+  display:block;
+  width:52px;
+  height:42px;
+  box-sizing:border-box;
+  border:4px solid #d8dee2;
+  border-radius:8px;
+  background:linear-gradient(145deg,#4c555b,#1d2328 58%,#111518);
+  box-shadow:
+    0 7px 18px rgba(0,0,0,.58),
+    inset 0 2px 0 rgba(255,255,255,.18),
+    inset 0 -5px 9px rgba(0,0,0,.44);
+}
+.mode-lock-icon b::before,
+.advanced-access-lock-art .simple-lock::before,
+.black-market-lock-icon .simple-lock::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:-25px;
+  width:29px;
+  height:29px;
+  transform:translateX(-50%);
+  box-sizing:border-box;
+  border:7px solid #cbd2d6;
+  border-bottom:0;
+  border-radius:18px 18px 0 0;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.5));
+}
+.mode-lock-icon b::after,
+.advanced-access-lock-art .simple-lock::after,
+.black-market-lock-icon .simple-lock::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:13px;
+  width:7px;
+  height:13px;
+  transform:translateX(-50%);
+  border-radius:5px;
+  background:#738087;
+  box-shadow:0 0 0 1px rgba(0,0,0,.35);
+}
+
+.advanced-access-window{width:min(620px,100%)}
+.advanced-access-lock-art{
+  position:relative;
+  height:112px;
+  margin:0 auto 10px;
+  max-width:430px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  border:1px solid #37414a;
+  background:#0c1115;
+  box-shadow:inset 0 0 30px rgba(0,0,0,.6);
+}
+.advanced-access-lock-art .simple-lock{width:64px;height:52px;border-width:4px}
+.advanced-access-lock-art .simple-lock::before{width:34px;height:34px;top:-29px;border-width:8px}
+.advanced-access-lock-art .simple-lock::after{width:7px;height:14px;top:16px}
+.advanced-access-note{color:#8f99a3;font-size:13px;line-height:1.5}
+.advanced-access-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+
+/* Black Market: the lock appears only when the current reroll failed. */
+.black-market-lock-wrap{
+  position:relative;
+  display:inline-flex;
+  align-items:stretch;
+  min-width:0;
+  isolation:isolate;
+}
+.black-market-lock-icon{
+  position:absolute;
+  inset:-7px -8px;
+  z-index:6;
+  pointer-events:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:visible;
+}
+.black-market-lock-icon.hidden{display:none}
+.black-market-lock-icon .simple-lock{width:40px;height:34px;border-width:3px}
+.black-market-lock-icon .simple-lock::before{width:22px;height:22px;top:-19px;border-width:5px}
+.black-market-lock-icon .simple-lock::after{width:5px;height:10px;top:10px}
+
+@media(max-width:760px){
+  .advanced-access-actions{flex-direction:column}.advanced-access-actions button{width:100%}
+  .advanced-access-lock-art{height:92px}
+}
+body.theme-light .advanced-access-help{color:#65717a}
+body.theme-light .advanced-access-lock-art{background:#e9eef1;border-color:#cad3da}
+body.theme-light .mode-lock-icon b,
+body.theme-light .advanced-access-lock-art .simple-lock,
+body.theme-light .black-market-lock-icon .simple-lock{
+  border-color:#69747b;
+  background:linear-gradient(145deg,#eef2f4,#b8c1c6 62%,#8f999f);
+}
+body.theme-light .mode-lock-icon b::before,
+body.theme-light .advanced-access-lock-art .simple-lock::before,
+body.theme-light .black-market-lock-icon .simple-lock::before{border-color:#69747b}
+body.theme-light .mode-lock-icon b::after,
+body.theme-light .advanced-access-lock-art .simple-lock::after,
+body.theme-light .black-market-lock-icon .simple-lock::after{background:#4f5a61}
+body.theme-light .advanced-access-note{color:#65717a}
+
+
+/* ===== v2.0.16 — persistent exam access feedback ===== */
+.exam-access-saved{margin-top:12px;padding:10px 12px;border:1px solid #4e765b;border-radius:10px;background:rgba(62,126,77,.14);color:#9cddb0;font-weight:800;line-height:1.45}
+body.theme-light .exam-access-saved{background:#eef8f0;border-color:#acd0b4;color:#2e6b3c}
+
+/* v2.0.16 — hide the Black Market control completely in Light Mode */
+.black-market-lock-wrap.hidden{display:none!important}

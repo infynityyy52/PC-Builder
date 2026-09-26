@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PC Builder — v2.0.7</title>
+  <title>PC Builder — v2.0.17</title>
   <link rel="stylesheet" href="style.css">
   <meta name="theme-color" content="#101317">
 </head>
@@ -43,7 +43,7 @@
       <div id="continueWrap" class="continue-wrap hidden">
         <button id="continueBtn" class="menu-link-btn">↩ Продолжить текущую игру</button>
       </div>
-      <div class="menu-version">PC Builder • v2.0.7</div>
+      <div class="menu-version">PC Builder • v2.0.17</div>
     </section>
 
     <section id="modeScreen" class="screen hidden">
@@ -63,9 +63,10 @@
           <b>🟡 Сложный</b>
           <span>Слабый ПК и маленький бюджет</span>
         </button>
-        <button class="mode-card hardcore" data-mode="hardcore">
+        <button class="mode-card hardcore gated-mode-card" data-mode="hardcore" data-gated-mode="hardcore" aria-describedby="advancedAccessHelp">
           <b>🔴 Хардкор</b>
           <span>Практически голая система</span>
+          <span class="mode-lock-icon" aria-hidden="true"><b></b></span>
         </button>
         <div class="light-mode-choice">
           <button class="mode-card light" data-mode="light">
@@ -73,9 +74,66 @@
             <span>Спокойный режим без лишней экономики и случайных событий. При запуске можно включить новое обучение.</span>
           </button>
         </div>
+        <button class="mode-card problem-mode-card gated-mode-card" data-mode="problem" data-gated-mode="problem" aria-describedby="advancedAccessHelp">
+          <b>⚠ Problem</b>
+          <span>Найди ошибку в готовой сборке. А может, ошибки вообще нет.</span>
+          <span class="mode-lock-icon" aria-hidden="true"><b></b></span>
+        </button>
       </div>
     </section>
 
+    <p id="advancedAccessHelp" class="advanced-access-help hidden">Чтобы открыть Хардкор и Problem, сначала нужно пройти экзамен в Лайт-режиме.</p>
+
+    <div id="advancedAccessModal" class="menu-modal advanced-access-modal hidden" aria-hidden="true">
+      <div class="menu-modal-backdrop"></div>
+      <section class="menu-modal-window advanced-access-window" role="dialog" aria-modal="true" aria-labelledby="advancedAccessTitle">
+        <div class="menu-modal-header"><h2 id="advancedAccessTitle">🔒 Доступ пока закрыт</h2></div>
+        <div class="menu-modal-body">
+          <div class="advanced-access-lock-art" aria-hidden="true"><b class="simple-lock"></b></div>
+          <p id="advancedAccessText">Хардкор и режим «Проблема» откроются после успешного экзамена в Лайт-режиме.</p>
+          <p class="advanced-access-note">Сначала собери рабочий ПК в Лайте, доведи его до требований экзамена и пройди проверку. После успешной сдачи доступ сохранится.</p>
+          <div class="advanced-access-actions">
+            <button id="advancedAccessCloseBtn" class="small">Назад</button>
+            <button id="advancedAccessLightBtn" class="primary">Перейти к Лайту</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+
+    <div id="problemDifficultyModal" class="menu-modal problem-difficulty-modal hidden" aria-hidden="true">
+      <div class="menu-modal-backdrop"></div>
+      <section class="menu-modal-window problem-difficulty-window" role="dialog" aria-modal="true" aria-labelledby="problemDifficultyTitle">
+        <div class="menu-modal-header">
+          <div>
+            <h2 id="problemDifficultyTitle">⚠ Проблема</h2>
+            <p id="problemDifficultyText" class="problem-modal-subtitle">Выбери сложность. Игра не скажет, есть ли в сборке ошибка.</p>
+          </div>
+          <button id="problemDifficultyCancelBtn" class="small">Назад</button>
+        </div>
+        <div id="problemDifficultyOptions" class="problem-difficulty-options"></div>
+      </section>
+    </div>
+
+    <section id="problemScreen" class="screen problem-screen hidden" aria-label="Problem mode">
+      <div class="problem-screen-header">
+        <div>
+          <div class="problem-title-row"><h2 id="problemGameTitle">Проблема</h2><span id="problemDifficultyLabel" class="badge">Сложность 1</span></div>
+          <p id="problemGameHint">Посмотри на сборку. Если думаешь, что здесь есть ошибка, выбери проблемный элемент или элементы и нажми «Подтвердить».</p>
+          <p id="problemNoIssueHint" class="problem-no-issue-hint">Если ты думаешь, что тут нет ошибки — просто нажми «Подтвердить», ничего не выбирая.</p>
+        </div>
+        <button type="button" class="small" id="problemBackBtnStatic">← К режимам</button>
+      </div>
+      <div class="problem-board-shell">
+        <div id="problemPartsGrid" class="problem-parts-grid"></div>
+      </div>
+      <button type="button" id="problemConfirmBtn" class="primary problem-confirm-btn">Подтвердить</button>
+      <div id="problemDetailBackdrop" class="problem-detail-backdrop" aria-hidden="true"></div>
+      <section id="problemDetailDrawer" class="problem-detail-drawer" aria-hidden="true" aria-label="Component specifications">
+        <div id="problemDetailBody"></div>
+      </section>
+      <div id="problemResult" class="problem-result hidden"></div>
+    </section>
 
     <div id="lightTrainingConfirmModal" class="menu-modal light-training-modal hidden" aria-hidden="true">
       <div class="menu-modal-backdrop"></div>
@@ -120,8 +178,11 @@
           </div>
           <div id="pcParts" class="parts"></div>
           <div class="score-row">
-            <span>Мощность ПК</span>
-            <strong id="power">0</strong>
+            <div class="score-row-value">
+              <span>Мощность ПК</span>
+              <strong id="power">0</strong>
+            </div>
+            <button id="lightCompleteCheckBtn" class="small light-complete-check hidden">🛠 Полная проверка</button>
           </div>
         </section>
 
@@ -202,7 +263,10 @@
               <p>На хардкоре каталог становится многоуровневым: производитель → серия → детали.</p>
             </div>
             <div class="shop-launch-buttons">
-              <button id="openBlackMarketBtn" class="primary black-market-button black-market-locked" disabled>⛓️ Чёрный рынок</button>
+              <span class="black-market-lock-wrap">
+                <button id="openBlackMarketBtn" class="primary black-market-button black-market-locked" disabled>Чёрный рынок</button>
+                <span id="blackMarketLockIcon" class="black-market-lock-icon" aria-hidden="true"><b class="simple-lock"></b></span>
+              </span>
               <button id="openShopBtn" class="primary shop-open">Открыть каталог</button>
             </div>
           </div>
@@ -632,7 +696,7 @@
     <div class="menu-modal-backdrop" data-close-menu-modal="log"></div>
     <section class="menu-modal-window update-log-window" role="dialog" aria-modal="true" aria-labelledby="updateLogTitle">
       <div class="menu-modal-header"><h2 id="updateLogTitle">📜 Update Log</h2><button class="small" data-close-menu-modal="log">Закрыть</button></div>
-      <pre id="updateLogContent" class="update-log-content"></pre>
+      <div id="updateLogContent" class="update-log-content" aria-live="polite"></div>
     </section>
   </div>
 
@@ -688,6 +752,7 @@
   <script src="11-catalog-ui.js"></script>
   <script src="12-achievements.js"></script>
   <script src="13-settings-update-ui.js"></script>
+  <script src="15-problem-mode.js"></script>
   <script src="14-main.js"></script>
 </body>
 </html>

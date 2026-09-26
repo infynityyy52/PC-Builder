@@ -1,14 +1,14 @@
-const GAME_VERSION = 'v2.0.7';
+const GAME_VERSION = 'v2.0.17';
 
 const LIGHT_START_BUILD = Object.freeze({
   CPU: 'cpu-i3-10100',
-  RAM: 'starter-easy-ram',
+  RAM: 'ram-ddr3-8',
   GPU: 'gpu-gt-1030',
-  Storage: 'starter-easy-storage',
+  Storage: 'storage-ssd-256-sata',
   PSU: 'psu-450',
-  Case: 'starter-easy-case',
+  Case: 'case-case-basic',
   Motherboard: 'starter-easy-mb',
-  Cooling: 'starter-easy-cooling'
+  Cooling: 'cooling-cooler-stock'
 });
 
 const MODE_CONFIG = {
@@ -23,7 +23,7 @@ const MODE_CONFIG = {
     money: 500,
     baseReward: 40,
     start: {
-      CPU: 'cpu-i3-10100', RAM: 'starter-easy-ram', GPU: 'gpu-gt-1030', Storage: 'starter-easy-storage',
+      CPU: 'cpu-i3-10100', RAM: 'ram-ddr3-8', GPU: 'gpu-gt-1030', Storage: 'starter-easy-storage',
       PSU: 'psu-450', Case: 'starter-easy-case', Motherboard: 'starter-easy-mb', Cooling: 'starter-easy-cooling', OS: 'os-windows-10-home'
     }
   },
@@ -135,7 +135,7 @@ addCatalog('GPU', 'NVIDIA', 'GTX', [
   ['gtx-1650', 'GeForce GTX 1650', 700, 24], ['gtx-1660s', 'GeForce GTX 1660 Super', 950, 32]
 ], 0.62, [0.45, 2.45]);
 addCatalog('GPU', 'NVIDIA', 'RTX', [
-  ['rtx-2060', 'GeForce RTX 2060', 1200, 40], ['rtx-3060', 'GeForce RTX 3060', 1900, 57], ['rtx-4060', 'GeForce RTX 4060', 2200, 62],
+  ['rtx-2060', 'GeForce RTX 2060', 1200, 40], ['rtx-2070', 'GeForce RTX 2070', 1550, 48], ['rtx-3060', 'GeForce RTX 3060', 1900, 57], ['rtx-4060', 'GeForce RTX 4060', 2200, 62],
   ['rtx-4070', 'GeForce RTX 4070', 4200, 82], ['rtx-4070s', 'GeForce RTX 4070 SUPER', 5000, 91], ['rtx-4080s', 'GeForce RTX 4080 SUPER', 7800, 118], ['rtx-4090', 'GeForce RTX 4090', 10500, 145], ['rtx-5090', 'GeForce RTX 5090', 16500, 180]
 ], 0.50, [0.45, 2.85]);
 addCatalog('GPU', 'AMD', 'Radeon RX', [
@@ -358,6 +358,115 @@ addStarter('starter-hardcore-ram', 'RAM', '2 ГБ DDR3', 2);
 addStarter('starter-hardcore-gpu', 'GPU', 'Встроенная графика', 2);
 addStarter('starter-hardcore-mb', 'Motherboard', 'GIGABYTE H1200-D3', 1);
 addStarter('starter-hardcore-cooling', 'Cooling', 'Штатный кулер', 1);
+
+
+
+// ===== v2.0.9 — technical metadata for Problem Mode =====
+const GPU_TECH_METADATA = {
+  'gpu-gt-610': { gddr: 'DDR3', vramGb: 1 },
+  'gpu-gt-710': { gddr: 'DDR3', vramGb: 2 },
+  'gpu-gt-730': { gddr: 'GDDR5', vramGb: 2 },
+  'gpu-gt-1030': { gddr: 'GDDR5', vramGb: 2 },
+  'gpu-gt-1630': { gddr: 'GDDR6', vramGb: 4 },
+  'gpu-gtx-1050': { gddr: 'GDDR5', vramGb: 2 },
+  'gpu-gtx-1050ti': { gddr: 'GDDR5', vramGb: 4 },
+  'gpu-gtx-1060': { gddr: 'GDDR5', vramGb: 6 },
+  'gpu-gtx-1070': { gddr: 'GDDR5', vramGb: 8 },
+  'gpu-gtx-1080': { gddr: 'GDDR5X', vramGb: 8 },
+  'gpu-gtx-1080ti': { gddr: 'GDDR5X', vramGb: 11 },
+  'gpu-gtx-1650': { gddr: 'GDDR5', vramGb: 4 },
+  'gpu-gtx-1660s': { gddr: 'GDDR6', vramGb: 6 },
+  'gpu-rtx-2060': { gddr: 'GDDR6', vramGb: 6 },
+  'gpu-rtx-2070': { gddr: 'GDDR6', vramGb: 8 },
+  'gpu-rtx-3060': { gddr: 'GDDR6', vramGb: 12 },
+  'gpu-rtx-4060': { gddr: 'GDDR6', vramGb: 8 },
+  'gpu-rtx-4070': { gddr: 'GDDR6X', vramGb: 12 },
+  'gpu-rtx-4070s': { gddr: 'GDDR6X', vramGb: 12 },
+  'gpu-rtx-4080s': { gddr: 'GDDR6X', vramGb: 16 },
+  'gpu-rtx-4090': { gddr: 'GDDR6X', vramGb: 24 },
+  'gpu-rtx-5090': { gddr: 'GDDR7', vramGb: 32 },
+  'gpu-rx-5500xt': { gddr: 'GDDR6', vramGb: 8 },
+  'gpu-rx-6600': { gddr: 'GDDR6', vramGb: 8 },
+  'gpu-rx-6700xt': { gddr: 'GDDR6', vramGb: 12 },
+  'gpu-rx-7600': { gddr: 'GDDR6', vramGb: 8 },
+  'gpu-rx-7700xt': { gddr: 'GDDR6', vramGb: 12 },
+  'gpu-rx-7800xt': { gddr: 'GDDR6', vramGb: 16 },
+  'gpu-rx-7900xt': { gddr: 'GDDR6', vramGb: 20 },
+  'gpu-rx-7900xtx': { gddr: 'GDDR6', vramGb: 24 },
+  'gpu-arc-a580': { gddr: 'GDDR6', vramGb: 8 },
+  'gpu-arc-a750': { gddr: 'GDDR6', vramGb: 8 },
+  'gpu-arc-b580': { gddr: 'GDDR6', vramGb: 12 }
+};
+Object.entries(GPU_TECH_METADATA).forEach(([id, meta]) => {
+  const item = SHOP.find(entry => entry.id === id);
+  if (item) Object.assign(item, meta);
+});
+
+function inferredReleaseYear(item) {
+  if (!item) return null;
+  const id = String(item.id || '');
+  if (item.category === 'CPU') {
+    const exact = {
+      'cpu-j2900': 2013, 'cpu-cel-g5905': 2020, 'cpu-cel-g6900': 2022,
+      'cpu-pentium-g6400': 2020, 'cpu-pentium-g7400': 2022,
+      'cpu-i3-10100': 2020, 'cpu-i3-12100f': 2022, 'cpu-i3-13100f': 2023,
+      'cpu-i5-10400f': 2020, 'cpu-i5-12400f': 2022, 'cpu-i5-13400f': 2023, 'cpu-i5-14600k': 2023,
+      'cpu-i7-10700k': 2020, 'cpu-i7-12700k': 2021, 'cpu-i7-13700k': 2022, 'cpu-i7-14700k': 2023,
+      'cpu-i9-11900k': 2021, 'cpu-i9-12900k': 2021, 'cpu-i9-13900k': 2022, 'cpu-i9-14900k': 2023,
+      'cpu-ultra5-245k': 2024, 'cpu-ultra7-265k': 2024, 'cpu-ultra9-285k': 2024,
+      'cpu-xeon-e-2336': 2021, 'cpu-xeon-e-2388g': 2021, 'cpu-xeon-w-1290p': 2020,
+      'cpu-r3-3100': 2020, 'cpu-r3-4100': 2022,
+      'cpu-r5-3600': 2019, 'cpu-r5-5600': 2022, 'cpu-r5-7600': 2022, 'cpu-r5-9600x': 2024,
+      'cpu-r7-5700x': 2022, 'cpu-r7-5800x3d': 2022, 'cpu-r7-7800x3d': 2023, 'cpu-r7-9700x': 2024,
+      'cpu-r9-5900x': 2020, 'cpu-r9-7900x': 2022, 'cpu-r9-7950x': 2022, 'cpu-r9-9950x': 2024, 'cpu-r9-9950x3d': 2025
+    };
+    if (exact[id]) return exact[id];
+  }
+  if (item.category === 'GPU') {
+    const exact = {
+      'gpu-gt-610': 2012, 'gpu-gt-710': 2014, 'gpu-gt-730': 2014, 'gpu-gt-1030': 2017, 'gpu-gt-1630': 2022,
+      'gpu-gtx-1050': 2016, 'gpu-gtx-1050ti': 2016, 'gpu-gtx-1060': 2016, 'gpu-gtx-1070': 2016, 'gpu-gtx-1080': 2016, 'gpu-gtx-1080ti': 2017,
+      'gpu-gtx-1650': 2019, 'gpu-gtx-1660s': 2019,
+      'gpu-rtx-2060': 2019, 'gpu-rtx-2070': 2018, 'gpu-rtx-3060': 2021, 'gpu-rtx-4060': 2023,
+      'gpu-rtx-4070': 2023, 'gpu-rtx-4070s': 2024, 'gpu-rtx-4080s': 2024, 'gpu-rtx-4090': 2022, 'gpu-rtx-5090': 2025,
+      'gpu-rx-5500xt': 2019, 'gpu-rx-6600': 2021, 'gpu-rx-6700xt': 2021, 'gpu-rx-7600': 2023, 'gpu-rx-7700xt': 2023,
+      'gpu-rx-7800xt': 2023, 'gpu-rx-7900xt': 2023, 'gpu-rx-7900xtx': 2022,
+      'gpu-arc-a580': 2023, 'gpu-arc-a750': 2022, 'gpu-arc-b580': 2024
+    };
+    if (exact[id]) return exact[id];
+  }
+  if (item.category === 'Motherboard') {
+    if (/b860/.test(id)) return 2025;
+    if (/z890/.test(id)) return 2024;
+    if (/b760/.test(id)) return 2023;
+    if (id === 'motherboard-mb-z790-256') return 2023;
+    if (/z790/.test(id)) return 2022;
+    if (/b660|z690/.test(id)) return 2021;
+    if (/b560/.test(id)) return 2021;
+    if (/h410/.test(id)) return 2020;
+    if (/a320/.test(id)) return 2017;
+    if (/b450/.test(id)) return 2018;
+    if (/b550/.test(id)) return 2020;
+    if (/b650|x670/.test(id)) return 2022;
+    if (/x870/.test(id)) return 2024;
+  }
+  if (item.category === 'RAM') return item.group === 'DDR3' ? 2007 : item.group === 'DDR4' ? 2014 : 2020;
+  if (item.category === 'OS') {
+    if (/windows-xp/.test(id)) return 2001; if (/vista/.test(id)) return 2006; if (/windows-7/.test(id)) return 2009;
+    if (/windows-81/.test(id)) return 2013; if (/windows-10/.test(id)) return 2015; if (/windows-11/.test(id)) return 2021;
+    if (/macos-15|^os-macos$/.test(id)) return 2024; if (/macos-14/.test(id)) return 2023; if (/macos-13/.test(id)) return 2022;
+    if (/macos-12/.test(id)) return 2021; if (/macos-11/.test(id)) return 2020; if (/macos-10-15/.test(id)) return 2019; if (/macos-10-14/.test(id)) return 2018;
+    return 2022;
+  }
+  if (item.category === 'Storage') {
+    if (/gen5/.test(id)) return 2023;
+    if (/nvme/.test(id)) return 2019;
+    if (/ssd-/.test(id)) return 2017;
+    return 2014;
+  }
+  return null;
+}
+SHOP.forEach(item => { if (item.releaseYear == null) item.releaseYear = inferredReleaseYear(item); });
 
 // Старые ID больше не добавляются в SHOP: устаревшие позиции удалены из каталога.
 // Для совместимости старых сохранений оставляем только таблицу миграции ID.

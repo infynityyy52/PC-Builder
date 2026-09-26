@@ -27,7 +27,7 @@ function partPlatform(item) {
 function motherboardSpec(item) {
   if (!item || item.category !== 'Motherboard') return null;
   const id = item.id;
-  if (/starter-easy-mb/i.test(id)) return { platform: 'LGA1200', ramType: 'DDR4', maxRamGb: 16, ramSlots: 2, maxCpuTdp: 95 };
+  if (/starter-easy-mb/i.test(id)) return { platform: 'LGA1200', ramType: 'DDR3', maxRamGb: 16, ramSlots: 2, maxCpuTdp: 95 };
   if (/starter-hard-mb/i.test(id)) return { platform: 'LGA1200', ramType: 'DDR3', maxRamGb: 8, ramSlots: 2, maxCpuTdp: 95 };
   if (/starter-hardcore-mb/i.test(id)) return { platform: 'LGA1200', ramType: 'DDR3', maxRamGb: 4, ramSlots: 2, maxCpuTdp: 95 };
   if (/h410/i.test(id)) return { platform: 'LGA1200', ramType: 'DDR4', maxRamGb: 64, ramSlots: 2, maxCpuTdp: 125 };
@@ -51,7 +51,8 @@ function motherboardSpec(item) {
 }
 function ramType(item) {
   if (!item || item.category !== 'RAM') return null;
-  if (/starter-(easy|hard)-ram/i.test(item.id)) return 'DDR4';
+  if (/starter-easy-ram/i.test(item.id)) return 'DDR3';
+  if (/starter-hard-ram/i.test(item.id)) return 'DDR3';
   if (/starter-hardcore-ram/i.test(item.id)) return 'DDR3';
   return item.group;
 }
@@ -68,7 +69,7 @@ function gpuRecommendedPsu(item) {
   const id = item.id;
   const explicit = {
     'gpu-rtx-5090': 1000, 'gpu-rtx-4090': 850, 'gpu-rtx-4080s': 750, 'gpu-rtx-4070s': 650, 'gpu-rtx-4070': 650,
-    'gpu-rtx-4060': 450, 'gpu-rtx-3060': 550, 'gpu-rtx-2060': 500,
+    'gpu-rtx-4060': 450, 'gpu-rtx-2070': 550, 'gpu-rtx-3060': 550, 'gpu-rtx-2060': 500,
     'gpu-rx-7900xtx': 800, 'gpu-rx-7900xt': 750, 'gpu-rx-7800xt': 700, 'gpu-rx-7700xt': 700, 'gpu-rx-7600': 550
   };
   if (explicit[id]) return explicit[id];
